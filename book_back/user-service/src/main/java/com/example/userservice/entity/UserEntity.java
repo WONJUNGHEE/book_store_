@@ -18,9 +18,9 @@ public class UserEntity {
     private String encryptedPwd;
     @Column(nullable = false, length= 50)
     private String name;
-    @Column(nullable = false, length= 50, unique = true)
+    @Column(nullable = false, length= 50)
     private String email;
-    @Column(nullable = false, length= 50, unique = true)
+    @Column(nullable = false, length= 50)
     private String phonenum;
     @Column(nullable = false, length= 100)
     private String address;

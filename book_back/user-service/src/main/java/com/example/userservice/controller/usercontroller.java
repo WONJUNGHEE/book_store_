@@ -61,9 +61,6 @@ public class usercontroller {
         // userDto -> responseUser
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 
-        /* 로그인 성공시 세션 사용 */
-        session.setAttribute("login", user);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
 
 
