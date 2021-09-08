@@ -44,7 +44,7 @@ public class CatalogController {
         });
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-    @GetMapping("/catalogs/{productId}")
+    @GetMapping("/catalogs/pid/{productId}")
     public ResponseEntity<ResponseCatalog> getCatalogByproductId(@PathVariable("productId") String productId) {
         CatalogEntity catalogEntity = catalogService.getCatalogByProductId(productId);
 
@@ -55,7 +55,7 @@ public class CatalogController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("/catalogs/{productName}")
+    @GetMapping("/catalogs/pn/{productName}")
     public ResponseEntity<ResponseCatalog> getCatalogByproductName(@PathVariable("productName") String productName) {
         CatalogEntity catalogEntity = catalogService.getCatalogByProductName(productName);
 
