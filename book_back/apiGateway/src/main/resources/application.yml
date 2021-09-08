@@ -3,8 +3,7 @@ server:
 
 spring:
   application:
-    name: apigateway-service
-
+    name: api-gateway-service
   cloud:
     gateway:
       routes:
@@ -24,22 +23,15 @@ spring:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           predicates:
-            - Path=/user-service/logout
-            - Method=GET
-          uri: lb://USER-SERVICE
-          filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        - id: user-service
-          predicates:
             - Path=/user-service/users
-            - Method=POST, GET
+            - Method=POST
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           predicates:
             - Path=/user-service/**
-            - Method=GET, POST, DELETE, PUT
+            - Method=GET
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
@@ -47,6 +39,7 @@ spring:
         - id: catalog-service
           predicates:
             - Path=/catalog-service/**
+            - Method=GET,POST
           uri: lb://CATALOG-SERVICE
           filters:
             - RewritePath=/catalog-service/(?<segment>.*), /$\{segment}
@@ -56,13 +49,6 @@ spring:
           uri: lb://ORDER-SERVICE
           filters:
             - RewritePath=/order-service/(?<segment>.*), /$\{segment}
-        - id: cart-service
-          predicates:
-            - Path=/cart-service/**
-            - Method=GET, POST, DELETE, PUT
-          uri: lb://CART-SERVICE
-          filters:
-            - RewritePath=/cart-service/(?<segment>.*), /$\{segment}
 eureka:
   client:
     register-with-eureka: true
@@ -73,6 +59,11 @@ eureka:
 #token:
 #  expiration_time: 864000000
 #  secret: user_token
+
+logging:
+  level:
+    com:
+      orderservice: DEBUG
 
 management:
   endpoints:

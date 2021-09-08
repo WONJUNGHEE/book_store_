@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-@Transactional
 @RestController
 @RequestMapping("/")
 public class usercontroller {
@@ -61,6 +60,9 @@ public class usercontroller {
         // userDto -> responseUser
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 
+        /* 로그인 성공시 세션 사용 */
+        session.setAttribute("login", user);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
 
 
@@ -95,24 +97,17 @@ public class usercontroller {
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
 
-    /* 사용자 탈퇴 */
-    @DeleteMapping("/users/{userId}")
-    public void deleteByUserId(@PathVariable("userId") String userId) {
-        userService.deleteByUserId(userId);
-    }
+    /* 사용자 로그아웃 */
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpSession session) throws Exception {
+        Object object = session.getAttribute("login");
 
-    /* 회원정보 수정 */
-    @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseUser> updateUser(@PathVariable("userId") String userId,
-                                                   @RequestBody @Valid RequestUser requestUser) {
+        if (object != null) {
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserDto userDto = mapper.map(userService.getUserByUserId(userId),UserDto.class);
-        UserDto requestDto = mapper.map(requestUser, UserDto.class);
-        userService.updateUser(userDto, requestDto);
-        ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
+            session.removeAttribute("login");
+            session.invalidate();
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseUser);
+        return new ModelAndView("redirect:/");
     }
 }
