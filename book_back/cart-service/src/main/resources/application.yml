@@ -1,28 +1,24 @@
 server:
   port: 0
+
 spring:
   application:
-    name: cart-service
+    name: order-service
   zipkin:
     base-url: http://localhost:9411
     enabled: true
   sleuth:
     sampler:
       probability: 1.0
-  #  h2:
-  #    console:
-  #      enabled: true
-  #      settings:
-  #        web-allow-others: true
-  #      path: /h2-console
-  #
-  #  jpa:
-  #    hibernate:
-  #      ddl-auto: create-drop
-  #    show-sql: true
-  #    generate-ddl: true
-  #    database: mariadb
-  #    defer-datasource-initialization: true
+#  h2:
+#    console:
+#      enabled: true
+#      settings:
+#        web-allow-others: true
+#      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:33306/testdb
@@ -31,13 +27,13 @@ spring:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://127.0.0.1:8761/eureka
 
 logging:
   level:
-    com.example.catalogservice: DEBUG
+    com.example.orderservice: DEBUG
