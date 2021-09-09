@@ -90,4 +90,11 @@ public class CartController {
         log.info("After retrieve carts data");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @DeleteMapping("/{userId}/carts")
+    public ResponseEntity deleteCart(@PathVariable("userId") String userId) {
+        cartService.deleteByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 }

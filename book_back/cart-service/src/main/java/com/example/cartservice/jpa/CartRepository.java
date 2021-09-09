@@ -7,4 +7,5 @@ import java.time.LocalDate;
 public interface CartRepository extends CrudRepository<CartEntity, Long> {
     Iterable<CartEntity> findByUserId(String userId);
     CartEntity findByUserIdAndProductName(String userId,String productName);
+    void deleteByUserId(String userId);
 }
