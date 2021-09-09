@@ -49,21 +49,33 @@ public class CartController {
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
                                                     @RequestBody RequestCart cartDetails) {
 
-        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        CartDto cartDto = mapper.map(cartDetails, CartDto.class);
-        cartDto.setUserId(userId);
-        cartDto.setCategory(responseCatalog.getCategory());
-        CartDto createdOrder = cartService.createCart(cartDto);
+            CartDto cartDto = cartService.getCartsByProductName(userId,cartDetails.getProductName());
+            cartDto.setQty(cartDto.getQty()+cartDetails.getQty());
+            cartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice());
+            CartDto updatedCart = cartService.updateCart(cartDto);
+            ResponseCart responseCart = mapper.map(updatedCart,ResponseCart.class);
 
-        kafkaProducer.send("orders", cartDto);
-        ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+        } else {
+            ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
+            CartDto cartDto = mapper.map(cartDetails, CartDto.class);
+            cartDto.setUserId(userId);
+            cartDto.setCategory(responseCatalog.getCategory());
+            CartDto createdOrder = cartService.createCart(cartDto);
 
-        log.info("After added carts data");
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+            kafkaProducer.send("orders", cartDto);
+            ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
+
+            log.info("After added carts data");
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+        }
 
     }
 
@@ -78,5 +90,4 @@ public class CartController {
         log.info("After retrieve carts data");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
 }
