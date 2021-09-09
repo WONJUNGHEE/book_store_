@@ -9,17 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-<<<<<<< HEAD
     <artifactId>order-service</artifactId>
     <version>1.0</version>
     <name>order-service</name>
     <description>Demo project for Spring Boot</description>
-=======
-    <artifactId>orders-service</artifactId>
-    <version>1.0</version>
-    <name>orders-service</name>
-    <description>orders-service</description>
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
@@ -45,7 +38,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-<<<<<<< HEAD
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -56,68 +48,36 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-=======
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.3.176</version>
             <scope>runtime</scope>
         </dependency>
-<<<<<<< HEAD
 
-=======
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.3.8</version>
         </dependency>
-<<<<<<< HEAD
-=======
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>2.7.4</version>
         </dependency>
-<<<<<<< HEAD
-=======
-
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
-<<<<<<< HEAD
-=======
-
-        <!-- Feign Client -->
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
-<<<<<<< HEAD
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-=======
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- distributed tracing -->
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
@@ -130,10 +90,7 @@
             <version>2.2.8.RELEASE</version>
         </dependency>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -161,7 +118,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-<<<<<<< HEAD
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -170,8 +126,6 @@
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
-=======
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
         </plugins>
     </build>
 

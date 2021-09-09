@@ -1,22 +1,15 @@
 server:
   port: 0
-<<<<<<< HEAD
 
 spring:
   application:
     name: order-service
-=======
-spring:
-  application:
-    name: cart-service
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
   zipkin:
     base-url: http://localhost:9411
     enabled: true
   sleuth:
     sampler:
       probability: 1.0
-<<<<<<< HEAD
 #  h2:
 #    console:
 #      enabled: true
@@ -26,22 +19,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-=======
-  #  h2:
-  #    console:
-  #      enabled: true
-  #      settings:
-  #        web-allow-others: true
-  #      path: /h2-console
-  #
-  #  jpa:
-  #    hibernate:
-  #      ddl-auto: create-drop
-  #    show-sql: true
-  #    generate-ddl: true
-  #    database: mariadb
-  #    defer-datasource-initialization: true
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:33306/testdb
@@ -50,25 +27,13 @@ spring:
 
 eureka:
   instance:
-<<<<<<< HEAD
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-=======
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-<<<<<<< HEAD
       defaultZone: http://127.0.0.1:8761/eureka
 
 logging:
   level:
     com.example.orderservice: DEBUG
-=======
-      defaultZone: http://localhost:8761/eureka
-
-logging:
-  level:
-    com.example.catalogservice: DEBUG
->>>>>>> 610f58ab9daf17f514848a28b1b6c817dde405eb
