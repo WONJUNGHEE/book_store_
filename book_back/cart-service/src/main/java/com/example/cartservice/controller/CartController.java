@@ -67,7 +67,7 @@ public class CartController {
 
     }
 
-    @GetMapping("/{userId}/orders")
+    @GetMapping("/{userId}/carts")
     public ResponseEntity<List<ResponseCart>> getOrder(@PathVariable("userId") String userId) throws Exception {
         Iterable<CartEntity> cartList = cartService.getCartsByUserId(userId);
 
@@ -75,7 +75,7 @@ public class CartController {
         cartList.forEach(v -> {
             result.add(new ModelMapper().map(v, ResponseCart.class));
         });
-        log.info("After retrieve orders data");
+        log.info("After retrieve carts data");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -13,7 +13,7 @@ public class CartEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //
     @Column(nullable = false, unique = true)
-    private String cartId; //
+    private String cartId;
     @Column(nullable = false)
     private String productId; //
     @Column(nullable = false)
