@@ -9,7 +9,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/joneconsulting/my-spring-cloud-config
+          uri: https://github.com/kmswlee/my-spring-cloud-config
 
 
 management:

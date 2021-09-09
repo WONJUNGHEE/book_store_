@@ -14,21 +14,20 @@ public class KafkaProducer {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate){
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public CartDto send(String topic, CartDto cartDto) {
+    public CartDto send(String kafkaTopic, CartDto cartDto) {
         ObjectMapper mapper = new ObjectMapper();
-        String jsonInString  ="";
+        String jsonInString = "";
         try {
             jsonInString = mapper.writeValueAsString(cartDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-        kafkaTemplate.send(topic, jsonInString);
-        log.info("Requested cart was sent by Kafka Producer: " + jsonInString);
+        kafkaTemplate.send(kafkaTopic, jsonInString);
+        log.info("Requested order was sent by Kafka Producer"+jsonInString);
 
         return cartDto;
     }

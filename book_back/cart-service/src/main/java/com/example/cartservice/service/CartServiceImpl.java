@@ -8,6 +8,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -23,7 +24,6 @@ public class CartServiceImpl implements CartService {
     public CartDto createCart(CartDto cartDto) {
         cartDto.setCartId(UUID.randomUUID().toString());
         cartDto.setTotalPrice(cartDto.getQty() * cartDto.getUnitPrice());
-
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
@@ -35,18 +35,9 @@ public class CartServiceImpl implements CartService {
         return returnValue;
     }
 
-        @Override
-    public CartDto getCartByOrderId(String cartId) {
-        CartEntity cartEntity = cartRepository.findByCartId(cartId);
-        CartDto cartDto = new ModelMapper().map(cartEntity, CartDto.class);
-
-        return cartDto;
-    }
-
     @Override
-    public Iterable<CartEntity> getCartByUserId(String userId) {
-        return null;
+    public Iterable<CartEntity> getCartsByUserId(String userId) {
+        return cartRepository.findByUserId(userId);
     }
-
 
 }
