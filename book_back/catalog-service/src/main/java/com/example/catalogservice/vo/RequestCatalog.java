@@ -16,4 +16,8 @@ public class RequestCatalog {
     private Integer unitPrice;
     @NotNull(message = "Please Enter category")
     private String category;
+    @NotNull(message = "")
+    private String src;
+    @NotNull(message = "")
+    private String detail;
 }

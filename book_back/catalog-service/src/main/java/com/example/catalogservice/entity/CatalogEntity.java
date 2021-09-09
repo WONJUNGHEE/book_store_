@@ -28,4 +28,8 @@ public class CatalogEntity implements Serializable {
     private Date createdAt;
     @Column(nullable = false)
     private String category;
+    @Column
+    private String src;
+    @Column
+    private String detail;
 }
