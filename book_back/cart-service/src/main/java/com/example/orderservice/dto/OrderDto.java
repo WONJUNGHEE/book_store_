@@ -1,4 +1,4 @@
-package com.example.cartservice.dto;
+package com.example.orderservice.dto;
 
 import lombok.Data;
 
@@ -6,13 +6,14 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class CartDto implements Serializable {
+public class OrderDto implements Serializable {
     private String productId;
+    private String productName;
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
-    private LocalDate createdat;
-    private String cartId;
+    private String orderId;
     private String userId;
-    private String instance_Id;
+    private String category;
+    private LocalDate orderedAt;
 }
