@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { RootState } from '../../reducers';
 import { actions } from '../../reducers/loginReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { LoginApi } from '../../pages/api/Sign';
 
 const Login = (): JSX.Element => {
 	const dispatch = useDispatch();
@@ -23,25 +24,43 @@ const Login = (): JSX.Element => {
 			onClickLogin();
 		}
 	};
+
 	const onClickLogin = () => {
-		if (sessionStorage.getItem('user')) {
-			const userinfo = JSON.parse(sessionStorage.getItem('user'));
-			if (userinfo['id'] === inputId && userinfo['pw'] === inputPw) {
-				if (userinfo['id'] === 'admin') {
-					dispatch(actions.loginStart({ id: true, admin_check:true }));
+		LoginApi(inputId, inputPw)
+			.then(() => {
+				if (inputId === 'admin') {
+					dispatch(actions.loginStart({ id: true, admin_check: true }));
 				} else {
-					dispatch(actions.loginStart({ id: true,admin_check:false }));
+					dispatch(actions.loginStart({ id: true, admin_check: false }));
 				}
 				alert('로그인 성공');
 				sessionStorage.setItem('login-ing', 'true');
-				
 				router.push('/');
-			} else {
-				alert('비밀번호가 틀렸습니다.');
-			}
-		} else {
-			alert('없는 아이디입니다.');
-		}
+			})
+			.catch((error) => {
+				if (error.response.status === 401) {
+					alert('아이디와 비밀번호를 확인하세요');
+				}
+				console.log(error);
+			});
+		// if (sessionStorage.getItem('user')) {
+		// 	const userinfo = JSON.parse(sessionStorage.getItem('user'));
+		// 	if (userinfo['id'] === inputId && userinfo['pw'] === inputPw) {
+		// 		if (userinfo['id'] === 'admin') {
+		// 			dispatch(actions.loginStart({ id: true, admin_check: true }));
+		// 		} else {
+		// 			dispatch(actions.loginStart({ id: true, admin_check: false }));
+		// 		}
+		// 		alert('로그인 성공');
+		// 		sessionStorage.setItem('login-ing', 'true');
+
+		// 		router.push('/');
+		// 	} else {
+		// 		alert('비밀번호가 틀렸습니다.');
+		// 	}
+		// } else {
+		// 	alert('없는 아이디입니다.');
+		// }
 	};
 	return (
 		<Fragment>

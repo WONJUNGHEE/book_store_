@@ -1,46 +1,33 @@
 import axios from 'axios';
 
-export const SignUpApi = async (
-	name: string,
-	pwd: string,
-	myid: string,
-	phonenum: string,
-	email: string,
-	address: string,
-) => {
-	try {
-		// axios.post('user-service/users');
-		// axios({
-		// 	url: 'http://localhost:8000/user-service/users',
-		// 	method: 'POST',
-		// 	data: {
-		// 		name: name,
-		// 		pwd: pwd,
-		// 		myid: myid,
-		// 		phonenum: phonenum,
-		// 		email: email,
-		// 		address: address,
-		// 	},
-		// });
-		axios
-			.post('/user-service/users', {
-				name: name,
-				pwd: pwd,
-				myid: myid,
-				phonenum: phonenum,
-				email: email,
-				address: address,
-			})
-			.then((response) => console.log(response));
-	} catch (error) {
-		console.log(error);
-	}
+export const LoginApi = async (myid1: string, pwd1: string) => {
+	await axios
+		.post('http://192.168.35.111:50001/login', {
+			myid: myid1,
+			pwd: pwd1,
+		})
+		.then((res) =>
+			sessionStorage.setItem(
+				'login_info',
+				JSON.stringify([res.headers.token, res.headers.userid, myid1]),
+			),
+		);
 };
 
-const getBreeds = async () => {
-	try {
-		return await axios.get('https://dog.ceo/api/breeds/list/all');
-	} catch (error) {
-		console.error(error);
-	}
+export const SignUpApi = async (
+	name1: string,
+	pwd1: string,
+	myid1: string,
+	phonenum1: string,
+	email1: string,
+	address1: string,
+) => {
+	await axios.post('http://192.168.35.111:50001/users', {
+		name: name1,
+		pwd: pwd1,
+		myid: myid1,
+		phonenum: phonenum1,
+		email: email1,
+		address: address1,
+	});
 };

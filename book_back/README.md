@@ -1,3 +1,0 @@
-back-end
-
-service-discovery

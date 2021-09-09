@@ -1,0 +1,3 @@
+com\example\apigateway\filter\AuthorizationHeaderFilter.class
+com\example\apigateway\ApiGatewayApplication.class
+com\example\apigateway\filter\AuthorizationHeaderFilter$Config.class
