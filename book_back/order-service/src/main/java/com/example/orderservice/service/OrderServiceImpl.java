@@ -55,4 +55,9 @@ public class OrderServiceImpl implements OrderService {
     public Iterable<OrderEntity> getOrdersByUserIdAndOrderedAt(String userId, LocalDate sDate, LocalDate eDate) {
         return orderRepository.findByUserIdAndOrderedAtBetween(userId,sDate,eDate);
     }
+
+    @Override
+    public OrderDto createOrderByCart(OrderDto orderDto) {
+        return null;
+    }
 }

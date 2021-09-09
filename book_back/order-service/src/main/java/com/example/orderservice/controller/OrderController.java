@@ -11,6 +11,7 @@ import com.example.orderservice.vo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.message.LeaderChangeMessage;
 import org.apache.tomcat.jni.Local;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -92,11 +93,37 @@ public class OrderController {
         }
 
     }
-    @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId) {
-        ResponseCart responseCart = cartServiceClient.getCart(userId);
-        return null; // 미완성
-    }
+//    @PostMapping("/{userId}/carts/orders")
+//    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
+//                                                               @RequestBody RequestOrder orderDetails) {
+//
+//        Iterable<OrderEntity> orderListbyCart = CartServiceClient.getCart(orderDetails.getUserId());
+//
+//        List<ResponseCart> responseCart = new ArrayList<>();
+//    /* cartServiceClient.getCart(userId) 에서 리스트로 넘어오는데 그러면 responseCart 가 리스트 타입으로 받아지는가? */
+//
+//        ModelMapper mapper = new ModelMapper();
+//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        /* 매핑 강도 설정 */
+//
+//        responseCart.forEach(v -> {
+//            /* responseCart 의 아이템 하나하나를 v */
+//        OrderDto orderDto = mapper.map(v, OrderDto.class); /* orderDto에 v 를 넣어준다(매핑한다) */
+//        orderDto.setUserId(userId);
+//        orderDto.setCategory(v.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+//        orderDto.setProductId(v.getProductId());
+//        orderDto.setProductName(v.getProductName());
+//        OrderDto createdOrdersByCart = orderService.createOrderByCart(orderDto);
+//        kafkaProducer.send("orders", orderDto);
+//        ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
+//
+//
+//        });
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
+//
+//
+//    }
 
 
     @GetMapping("/{userId}/orders")
