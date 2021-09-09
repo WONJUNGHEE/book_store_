@@ -12,6 +12,7 @@ public class ResponseUser {
     private String name;
     private String email;
     private String userId;
+    private String address;
 
     private List<ResponseOrder> orders;
 }
