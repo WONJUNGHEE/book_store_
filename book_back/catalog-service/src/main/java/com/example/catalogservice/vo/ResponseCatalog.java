@@ -3,7 +3,6 @@ package com.example.catalogservice.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -13,6 +12,6 @@ public class ResponseCatalog {
     private String productName;
     private Integer qty;
     private Integer unitPrice;
-    private LocalDate createdAt;
+    private Date createdAt;
     private String category;
 }

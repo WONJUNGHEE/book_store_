@@ -46,7 +46,7 @@ public class CatalogController {
     }
     @GetMapping("/catalogs/pid/{productId}")
     public ResponseEntity<ResponseCatalog> getCatalogByproductId(@PathVariable("productId") String productId) {
-        CatalogEntity catalogEntity = catalogService.getByProductId(productId);
+        CatalogEntity catalogEntity = catalogService.getCatalogByProductId(productId);
 
         if (catalogEntity != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -102,7 +102,7 @@ public class CatalogController {
     public ResponseEntity<ResponseCatalog> updateCatalog(@PathVariable("productId") String productId, @RequestBody @Valid RequestCatalog requestCatalog) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        CatalogDto catalogDto = mapper.map(catalogService.getByProductId(productId),CatalogDto.class);
+        CatalogDto catalogDto = mapper.map(catalogService.getCatalogByProductId(productId),CatalogDto.class);
         CatalogDto requestDto = mapper.map(requestCatalog,CatalogDto.class);
         catalogService.updateCatalog(catalogDto, requestDto);
         ResponseCatalog responseCatalog = mapper.map(catalogDto,ResponseCatalog.class);

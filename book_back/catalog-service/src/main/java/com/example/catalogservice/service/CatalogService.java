@@ -6,7 +6,7 @@ import com.example.catalogservice.vo.RequestCatalog;
 
 public interface CatalogService {
     Iterable<CatalogEntity> getAllCatalog();
-    CatalogEntity getByProductId(String productId);
+    CatalogEntity getCatalogByProductId(String productId);
     CatalogEntity getCatalogByProductName(String productName);
     Iterable<CatalogEntity> getCatalogByCategory(String category);
     void deleteCatalogById(String productId);
