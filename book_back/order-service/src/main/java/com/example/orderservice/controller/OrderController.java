@@ -1,15 +1,13 @@
 package com.example.orderservice.controller;
 
+import com.example.orderservice.client.CartServiceClient;
 import com.example.orderservice.client.CatalogServiceClient;
 import com.example.orderservice.dto.*;
 import com.example.orderservice.jpa.OrderEntity;
 import com.example.orderservice.mq.KafkaProducer;
 import com.example.orderservice.mq.OrderProducer;
 import com.example.orderservice.service.OrderService;
-import com.example.orderservice.vo.RequestDate;
-import com.example.orderservice.vo.RequestOrder;
-import com.example.orderservice.vo.ResponseCatalog;
-import com.example.orderservice.vo.ResponseOrder;
+import com.example.orderservice.vo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -36,16 +35,18 @@ public class OrderController {
     OrderService orderService;
     KafkaProducer  kafkaProducer;
     CatalogServiceClient catalogServiceClient;
+    CartServiceClient cartServiceClient;
     OrderProducer orderProducer;
 
     @Autowired
     public OrderController(Environment env, OrderService orderService,KafkaProducer kafkaProducer,
-                           CatalogServiceClient catalogServiceClient,
+                           CatalogServiceClient catalogServiceClient, CartServiceClient cartServiceClient,
                            OrderProducer orderProducer) {
         this.env = env;
         this.orderService = orderService;
         this.kafkaProducer = kafkaProducer;
         this.catalogServiceClient = catalogServiceClient;
+        this.cartServiceClient = cartServiceClient;
         this.orderProducer = orderProducer;
     }
 
@@ -91,6 +92,12 @@ public class OrderController {
         }
 
     }
+    @PostMapping("/{userId}/carts/orders")
+    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId) {
+        ResponseCart responseCart = cartServiceClient.getCart(userId);
+        return null; // 미완성
+    }
+
 
     @GetMapping("/{userId}/orders")
     public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
