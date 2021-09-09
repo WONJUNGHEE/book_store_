@@ -1,5 +1,5 @@
 import React from 'react';
-import Book_register from '../components/Book_register';
+import Book_register from '../components/Catalog/Book_register';
 
 // import styled from 'styled-components';
 
