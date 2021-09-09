@@ -12,5 +12,7 @@ public class CatalogDto implements Serializable {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
+    private String detail;
+    private String src;
 
 }

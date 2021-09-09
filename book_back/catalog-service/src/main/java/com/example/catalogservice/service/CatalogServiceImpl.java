@@ -49,6 +49,8 @@ public class CatalogServiceImpl implements CatalogService{
         catalogDto.setUnitPrice(requestCatalog.getUnitPrice());
         catalogDto.setCategory(requestCatalog.getCategory());
         catalogDto.setTotalPrice(requestCatalog.getTotalPrice());
+        catalogDto.setDetail(requestCatalog.getDetail());
+        catalogDto.setSrc(requestCatalog.getSrc());
         CatalogEntity catalogEntity = mapper.map(catalogDto,CatalogEntity.class);
         catalogRepository.save(catalogEntity);
         return null;
