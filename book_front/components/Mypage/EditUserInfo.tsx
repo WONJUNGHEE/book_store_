@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import Modal from '../Modal/Modal';
 import styled from 'styled-components';
 import { SignUpApi } from '../../pages/api/Sign';
+import axios from 'axios';
 
-const SignUp = (): JSX.Element => {
+const EditUserInfo = (): JSX.Element => {
 	const [ModalOpen, setModalOpen] = useState(false);
-	const [inputId, setInputId] = useState<string>('');
 	const [inputPw, setInputPw] = useState<string>('');
 	const [inputName, setInputName] = useState<string>('');
 	const [inputPhone, setInputPhone] = useState<string>('');
 	const [inputEmail, setInputEmail] = useState<string>('');
 	const [inputAddress, setInputAddress] = useState<string>('');
 
-	const handleInputId = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setInputId(e.target.value);
-	};
+	const userId = JSON.parse(sessionStorage.getItem('login_info'));
+
 	const handleInputPw = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputPw(e.target.value);
 	};
@@ -44,44 +43,39 @@ const SignUp = (): JSX.Element => {
 
 	const sign = (): void => {
 		if (
-			inputId === '' ||
 			inputPw === '' ||
 			inputName === '' ||
 			inputPhone === '' ||
 			inputEmail === '' ||
 			inputAddress === ''
 		) {
-			alert('회원가입 정보를 모두 입력해주세요.');
+			alert('정보를 모두 입력해주세요.');
 		} else {
-			SignUpApi(inputName, inputPw, inputId, inputPhone, inputEmail, inputAddress)
+			axios
+				.put(`http://192.168.35.111:50001/users/${userId[1]}`, {
+					name: inputName,
+					myid: userId[2],
+					pwd: inputPw,
+					phonenum: inputPhone,
+					email: inputEmail,
+					address: inputAddress,
+				})
 				.then((response) => {
-					alert('회원가입이 완료되었습니다.');
+					alert('정보수정이 완료되었습니다.');
 					closeModal();
 				})
 				.catch((error) => {
 					if (error.response.status === 400) {
 						alert('회원정보를 다시 확인해주세요');
-					} else if (error.response.status === 500) {
-						alert('아이디가 이미 존재합니다');
 					}
 				});
 		}
 	};
 	return (
 		<SignField>
-			<SignButton onClick={openModal}>회원가입</SignButton>
+			<SignButton onClick={openModal}>정보 수정</SignButton>
 			<Modal open={ModalOpen} className="login-button" close={closeModal} header="회원가입">
 				<InputData>
-					<SignField>
-						<SignInput
-							id="id"
-							type="text"
-							placeholder="아이디"
-							onChange={handleInputId}
-							onKeyPress={handleKeyPress}
-						/>
-						<Label htmlFor="id">아이디</Label>
-					</SignField>
 					<SignField>
 						<SignInput
 							id="password"
@@ -135,7 +129,7 @@ const SignUp = (): JSX.Element => {
 						<Label htmlFor="address">주소</Label>
 					</SignField>
 					<SignButton onClick={sign} title="login">
-						회원가입
+						수정하기
 					</SignButton>
 				</InputData>
 			</Modal>
@@ -221,4 +215,4 @@ const SignMail = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
-export default SignUp;
+export default EditUserInfo;
