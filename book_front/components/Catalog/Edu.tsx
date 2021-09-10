@@ -1,42 +1,86 @@
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { paginate } from '../../utils/paginate';
+import Pagination from './Pagination';
 
-const Edu = (): JSX.Element => {
-	const [booklists, setbooklists] = useState([]);
+const All_book = (): JSX.Element => {
+	const [booklists, setbooklists] = useState({ bookdata: [], pageSize: 3, currentPage: 1 });
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
 				const booklist = [];
 				const list1 = await axios.get('http://192.168.35.111:50101/catalogs');
+
 				for (const book of list1.data) {
-					console.log(book);
-					if (book.category === 'edu')
-						booklist.push(
-							<Bookinfo>
-								<img width="50px" height="70px"></img>
-								<Detail>
-									<div>
-										책 이름 : {book.productName} 가격 :{book.unitPrice}
-									</div>
-									<div>
-										이 책을 공부하면 네카라는 물론 삼성 현대 가고 싶은 회사를 갈 수
-										있습니다.가나다라마바사아자차카타타카한이정니앚,으마ㅓㄴ어지이아ㅣ나인아
-									</div>
-								</Detail>
-							</Bookinfo>,
-						);
+					let detaillength;
+					if (book.category === 'social') {
+						book.detail.length > 20
+							? (detaillength = book.detail.substr(0, 20) + '...')
+							: (detaillength = book.detail);
+						booklist.push({
+							...book,
+							detail: detaillength,
+						});
+					}
 				}
-				setbooklists(booklist);
+				setbooklists({ bookdata: booklist, pageSize: 3, currentPage: 1 });
 			} catch (e) {
 				console.log(e);
 			}
 		};
 		fetchUsers();
 	}, []);
+
+	const handlePageChange = (page) => {
+		setbooklists({ ...booklists, currentPage: page });
+	};
+	const { bookdata, pageSize, currentPage } = booklists;
+	const pagedBooks = paginate(bookdata, currentPage, pageSize);
+
+	const { length: count } = booklists.bookdata;
+	if (count === 0)
+		return (
+			<Fragment>
+				<Backg>
+					<Booktable>
+						<p>등록된 책이 없습니다. 정보가 없습니다.</p>;
+					</Booktable>
+				</Backg>
+			</Fragment>
+		);
 	return (
 		<Fragment>
-			<Backg>{booklists}</Backg>
+			<Backg>
+				<Booktable>
+					<thead>
+						<tr>
+							<th></th>
+							<th>제목</th>
+							<th>요약</th>
+							<th>가격</th>
+						</tr>
+					</thead>
+					<tbody>
+						{pagedBooks.map((data) => (
+							<tr key={data.createdAt}>
+								<td>
+									<img width="50px" height="70px" src={data.src}></img>
+								</td>
+								<td>{data.productName}</td>
+								<td>{data.detail}</td>
+								<td>{data.unitPrice}</td>
+							</tr>
+						))}
+					</tbody>
+				</Booktable>
+				<Pagination
+					pageSize={pageSize}
+					itemsCount={count}
+					currentPage={currentPage}
+					onPageChange={handlePageChange}
+				/>
+			</Backg>
 		</Fragment>
 	);
 };
@@ -56,4 +100,11 @@ const Bookinfo = styled.div`
 const Detail = styled.div`
 	margin: 10px;
 `;
-export default Edu;
+const Booktable = styled.table`
+	width: 100%;
+	text-align: center;
+	padding: 10px;
+	border: 1px solid goldenrod;
+	border-radius: 10px;
+`;
+export default All_book;

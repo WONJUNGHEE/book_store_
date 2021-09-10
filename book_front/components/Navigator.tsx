@@ -1,15 +1,18 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { RootState } from '../reducers';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../reducers/loginReducer';
 
 const Navigation = (): JSX.Element => {
 	const { id, admin_check } = useSelector((state: RootState) => state.loginReducer);
 	const [inputNav, setInputNav] = useState<boolean>(false);
+
 	const router = useRouter();
 	const dispatch = useDispatch();
+
 	const handleClick = (e) => {
 		e.preventDefault();
 		router.push(e.target.href);
@@ -26,6 +29,7 @@ const Navigation = (): JSX.Element => {
 	};
 	const CatalogClick = (e): void => {
 		e.preventDefault();
+
 		router.push(e.target.href);
 		setInputNav(false);
 	};

@@ -3,9 +3,9 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const Book_register = (): JSX.Element => {
-	const [file, setFile] = useState<string>();
-	const [previewURL, setpreviewURL] = useState<string>();
-	const [summary, setSummary] = useState<string>();
+	const [file, setFile] = useState<string>('');
+	const [previewURL, setpreviewURL] = useState<string>('');
+	const [summary, setSummary] = useState<string>('');
 	const [productId, setInputproductId] = useState<string>('');
 	const [productName, setproductName] = useState<string>('');
 	const [qty, setqty] = useState<string>('');
@@ -35,13 +35,27 @@ const Book_register = (): JSX.Element => {
 			register();
 		}
 	};
+
+	const registeraxios = async () => {
+		await axios
+			.post(`http://192.168.35.111:50101/catalogs`, {
+				productId: productId,
+				productName: productName,
+				qty: qty,
+				unitPrice: unitPrice,
+				category: category,
+				detail: summary,
+				src: previewURL,
+			})
+			.then(() => {
+				alert('등록이 완료되었습니다.');
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 	const registerClick = () => {
 		register();
-		setcategory('');
-		setunitPrice('');
-		setqty('');
-		setproductName('');
-		setInputproductId('');
 	};
 	const register = (): void => {
 		if (
@@ -49,24 +63,19 @@ const Book_register = (): JSX.Element => {
 			productName === '' ||
 			qty === '' ||
 			unitPrice === '' ||
-			category === ''
+			category === '' ||
+			summary === ''
 		) {
 			alert('정보를 모두 입력해주세요.');
 		} else {
-			axios
-				.post(`http://192.168.35.111:50101/catalogs`, {
-					productId: productId,
-					productName: productName,
-					qty: qty,
-					unitPrice: unitPrice,
-					category: category,
-				})
-				.then(() => {
-					alert('등록이 완료되었습니다.');
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			registeraxios();
+			setcategory('');
+			setunitPrice('');
+			setqty('');
+			setproductName('');
+			setInputproductId('');
+			setpreviewURL('');
+			setFile('');
 		}
 	};
 	const handleFileOnChange = (event) => {
@@ -93,7 +102,7 @@ const Book_register = (): JSX.Element => {
 						{profile_preview}
 						<input
 							type="file"
-							accept="image/jpg,impge/png,image/jpeg,image/gif"
+							accept="image/jpg,image/png,image/jpeg,image/gif"
 							name="profile_img"
 							onChange={handleFileOnChange}
 						></input>
@@ -184,6 +193,7 @@ const Wrap = styled.div`
 	display: flex;
 	flex-direction: row;
 	height: 510px;
+	width: 100%;
 	margin: 20px;
 	text-align: center;
 	font-size: 15px;
@@ -191,7 +201,7 @@ const Wrap = styled.div`
 const Book_image = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 100%;
+	width: 40%;
 	height: 100%;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -209,11 +219,12 @@ const Book_image = styled.div`
 const InputData = styled.div`
 	margin: 15px;
 	display: flex;
+	width: 60%;
 	flex-direction: column;
 	align-items: center;
 	& > input,
 	label {
-		width: 200px;
+		width: 300px;
 		padding: 5px;
 		margin: 5px;
 		text-align: center;
