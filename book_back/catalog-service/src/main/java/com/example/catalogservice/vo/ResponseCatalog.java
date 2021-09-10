@@ -14,4 +14,6 @@ public class ResponseCatalog {
     private Integer unitPrice;
     private Date createdAt;
     private String category;
+    private String detail;
+    private String src;
 }
