@@ -54,13 +54,13 @@ public class UserServicelmpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String myid) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByMyid(myid);
+    public UserDetails loadUserByUsername(String myId) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByMyId(myId);
 
         if (userEntity == null)
-            throw new UsernameNotFoundException(myid + ": not found");
+            throw new UsernameNotFoundException(myId + ": not found");
         // User is an UserDetails
-        User user = new User(userEntity.getMyid(), userEntity.getEncryptedPwd(),
+        User user = new User(userEntity.getMyId(), userEntity.getEncryptedPwd(),
                 true, true, true, true,
                 new ArrayList<>());
 
@@ -126,10 +126,10 @@ public class UserServicelmpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDetailsByMyid(String myid) {
-        UserEntity userEntity = userRepository.findByMyid(myid);
+    public UserDto getUserDetailsByMyId(String myId) {
+        UserEntity userEntity = userRepository.findByMyId(myId);
         if (userEntity == null)
-            throw new UsernameNotFoundException(myid);
+            throw new UsernameNotFoundException(myId);
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -153,11 +153,11 @@ public class UserServicelmpl implements UserService {
     public UserDto updateUser(UserDto userDto, UserDto requestUser) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        userDto.setMyid(requestUser.getMyid());
+        userDto.setMyId(requestUser.getMyId());
         userDto.setPwd(requestUser.getPwd());
-        userDto.setName(requestUser.getName());
+        userDto.setUserName(requestUser.getUserName());
         userDto.setEmail(requestUser.getEmail());
-        userDto.setPhonenum(requestUser.getPhonenum());
+        userDto.setPhoneNum(requestUser.getPhoneNum());
         userDto.setAddress(requestUser.getAddress());
         UserEntity userEntity = mapper.map(userDto,UserEntity.class);
         userRepository.save(userEntity);
