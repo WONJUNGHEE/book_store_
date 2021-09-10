@@ -10,4 +10,6 @@ public interface CartService {
     Iterable<CartEntity> getCartsByUserId(String userId);
     CartDto getCartsByProductName(String userId,String productName);
     CartDto updateCart(CartDto cartDto);
+
+    void deleteByUserId(String userId);
 }

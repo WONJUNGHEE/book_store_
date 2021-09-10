@@ -15,4 +15,5 @@ public class ResponseOrder {
     private Integer totalPrice;
     private LocalDate orderedAt;
     private String orderId;
+
 }

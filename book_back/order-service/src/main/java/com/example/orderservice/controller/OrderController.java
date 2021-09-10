@@ -11,6 +11,7 @@ import com.example.orderservice.vo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.message.LeaderChangeMessage;
 import org.apache.tomcat.jni.Local;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -92,9 +93,46 @@ public class OrderController {
 
     }
     @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId) {
-        ResponseCart responseCart = cartServiceClient.getCart(userId);
-        return null; // 미완성
+    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
+                                                               @RequestBody RequestOrder orderDetails) {
+
+//        Iterable<OrderEntity> orderListbyCart = CartServiceClient.getCart(orderDetails.getUserId());
+
+        List<ResponseOrder> responseOrders = new ArrayList<>();
+
+        boolean isAvailable = true;
+        ResponseCart responseCart = cartServiceClient.getCart(orderDetails.getUserId());
+
+        if(responseCart != null &&
+                responseCart.getQty()-orderDetails.getQty() < 0)
+            isAvailable = false;
+
+        /* cartServiceClient.getCart(userId) 에서 리스트로 넘어오는데 그러면 responseCart 가 리스트 타입으로 받아지는가? */
+        if (isAvailable) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        /* 매핑 강도 설정 */
+
+        OrderDto orderDto = mapper.map(orderDetails, OrderDto.class); /* orderDto에 v 를 넣어준다(매핑한다) */
+        orderDto.setUserId(userId);
+
+        for(CartDto cartDto : orderDetails.getCartList()){
+            /* responseCart 의 아이템 하나하나를 v */
+
+            cartDto.setCategory(cartDto.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+            cartDto.setProductId(cartDto.getProductId());
+            cartDto.setProductName(cartDto.getProductName());
+
+            OrderDto createdOrdersByCart = orderService.createOrderByCart(orderDto);
+            ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
+
+            responseOrders.add(responseOrder);
+
+//            kafkaProducer.send("orders", orderDto);
+        };
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseOrders);
+
     }
 
 

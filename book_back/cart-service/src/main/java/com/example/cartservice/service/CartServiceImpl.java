@@ -56,4 +56,9 @@ public class CartServiceImpl implements CartService {
 
         return returnValue;
     }
+
+    @Override
+    public void deleteByUserId(String userId) {
+    cartRepository.deleteByUserId(userId);
+    }
 }
