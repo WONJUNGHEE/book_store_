@@ -58,6 +58,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createOrderByCart(OrderDto orderDto) {
-        return null;
+        orderDto.setOrderId(UUID.randomUUID().toString());
+        orderDto.setTotalPrice(orderDto.getQty() * orderDto.getUnitPrice());
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        OrderEntity orderEntity = mapper.map(orderDto, OrderEntity.class);
+
+        orderRepository.save(orderEntity);
+
+        OrderDto returnValue = mapper.map(orderEntity, OrderDto.class);
+
+        return returnValue;
     }
 }
