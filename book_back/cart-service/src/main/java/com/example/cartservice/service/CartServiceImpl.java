@@ -29,7 +29,6 @@ public class CartServiceImpl implements CartService {
         CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
 
         cartRepository.save(cartEntity);
-
         CartDto returnValue = mapper.map(cartEntity, CartDto.class);
 
         return returnValue;
@@ -40,4 +39,21 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findByUserId(userId);
     }
 
+    @Override
+    public CartDto getCartsByProductName(String userId,String productName) {
+        CartEntity cartEntity = cartRepository.findByUserIdAndProductName(userId,productName);
+        CartDto cartDto = new ModelMapper().map(cartEntity,CartDto.class);
+        return cartDto;
+    }
+
+    @Override
+    public CartDto updateCart(CartDto cartDto) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
+        cartRepository.save(cartEntity);
+        CartDto returnValue = mapper.map(cartEntity,CartDto.class);
+
+        return returnValue;
+    }
 }
