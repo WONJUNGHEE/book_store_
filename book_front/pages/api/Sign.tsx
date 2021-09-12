@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export const LoginApi = async (myid1: string, pwd1: string) => {
 	await axios
-		.post('http://192.168.35.111:50001/login', {
-			myid: myid1,
+		.post('http://localhost:50001/login', {
+			myId: myid1,
 			pwd: pwd1,
 		})
 		.then((res) =>
@@ -22,11 +22,11 @@ export const SignUpApi = async (
 	email1: string,
 	address1: string,
 ) => {
-	await axios.post('http://192.168.35.111:50001/users', {
-		name: name1,
+	await axios.post('http://localhost:50001/users', {
+		userName: name1,
 		pwd: pwd1,
-		myid: myid1,
-		phonenum: phonenum1,
+		myId: myid1,
+		phoneNum: phonenum1,
 		email: email1,
 		address: address1,
 	});
