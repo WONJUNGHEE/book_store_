@@ -45,16 +45,16 @@ const Navigation = (): JSX.Element => {
 					<NavItem>
 						<a onClick={openNav}>카테고리</a>
 						<NavItemCatalog className={inputNav ? 'open' : 'close'}>
-							<a href="/CatalogPage" onClick={CatalogClick}>
+							<a href="/Nav/CatalogPage" onClick={CatalogClick}>
 								전체보기
 							</a>
-							<a href="/EduPage" onClick={CatalogClick}>
+							<a href="/Nav/EduPage" onClick={CatalogClick}>
 								교육
 							</a>
-							<a href="/Cartoonpage" onClick={CatalogClick}>
+							<a href="/Nav/Cartoonpage" onClick={CatalogClick}>
 								만화
 							</a>
-							<a href="/SocialPage" onClick={CatalogClick}>
+							<a href="/Nav/EduPage" onClick={CatalogClick}>
 								사회
 							</a>
 						</NavItemCatalog>

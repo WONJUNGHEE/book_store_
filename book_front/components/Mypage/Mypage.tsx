@@ -15,10 +15,10 @@ const MyPage = (): JSX.Element => {
 	useEffect(() => {
 		const myinfo = async () => {
 			try {
-				await axios.get(`http://192.168.35.111:50001/users/${userId[1]}`).then((res) => {
-					setName(res.data.name),
+				await axios.get(`http://localhost:50001/users/${userId[1]}`).then((res) => {
+					setName(res.data.userName),
 						setAddress(res.data.address),
-						setId(res.data.myid),
+						setId(res.data.myId),
 						setMail(res.data.email);
 				});
 				edit ? setedit(false) : setedit(true);

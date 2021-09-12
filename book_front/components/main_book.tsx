@@ -22,16 +22,13 @@ const Main_book = (): JSX.Element => {
 		setTimeout(showSlides, 5000);
 	};
 
-	const handle = (): void => {
-		alert(1);
-	};
 	useEffect(() => {
 		showSlides();
 	});
 
 	return (
 		<div>
-			<MainSlider onClick={handle}>
+			<MainSlider>
 				<Slider className="slider fade">
 					<Image priority src={ReactImg} width="300px" height="400px" />
 					<BookInfo>

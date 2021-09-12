@@ -1,10 +1,20 @@
 import { Fragment, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { uploadFile } from 'react-s3';
+
+const config = {
+	bucketName: 'book-store-5',
+	dirName: 'book-image',
+	region: 'us-west-2',
+	accessKeyId: 'AKIATAAJIQVAP5CT74P6',
+	secretAccessKey: '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',
+};
 
 const Book_register = (): JSX.Element => {
 	const [file, setFile] = useState<string>('');
 	const [previewURL, setpreviewURL] = useState<string>('');
+
 	const [summary, setSummary] = useState<string>('');
 	const [productId, setInputproductId] = useState<string>('');
 	const [productName, setproductName] = useState<string>('');
@@ -36,16 +46,16 @@ const Book_register = (): JSX.Element => {
 		}
 	};
 
-	const registeraxios = async () => {
+	const registeraxios = async (data) => {
 		await axios
-			.post(`http://192.168.35.111:50101/catalogs`, {
+			.post('http://localhost:50101/catalogs', {
 				productId: productId,
 				productName: productName,
 				qty: qty,
 				unitPrice: unitPrice,
 				category: category,
 				detail: summary,
-				src: previewURL,
+				src: data,
 			})
 			.then(() => {
 				alert('등록이 완료되었습니다.');
@@ -68,15 +78,18 @@ const Book_register = (): JSX.Element => {
 		) {
 			alert('정보를 모두 입력해주세요.');
 		} else {
-			registeraxios();
-			setcategory('');
-			setunitPrice('');
-			setqty('');
-			setproductName('');
-			setInputproductId('');
-			setpreviewURL('');
-			setFile('');
+			s3();
 		}
+	};
+	const s3 = async () => {
+		await uploadFile(file, config)
+			.then((data) => {
+				console.log(data);
+				registeraxios(data.location);
+			})
+			.catch((err) => {
+				alert(err);
+			});
 	};
 	const handleFileOnChange = (event) => {
 		event.preventDefault();
@@ -150,15 +163,15 @@ const Book_register = (): JSX.Element => {
 						></input>
 						<div>카테고리</div>
 						<div>
+							<input type="radio" name="my-input" id="edu" value="edu" onChange={handlecategory} />
+							<label htmlFor="edu">교육</label>
 							<input
 								type="radio"
 								name="my-input"
-								id="study"
-								value="study"
+								id="cartoon"
+								value="cartoon"
 								onChange={handlecategory}
 							/>
-							<label htmlFor="edu">교육</label>
-							<input type="radio" name="my-input" id="edu" value="edu" onChange={handlecategory} />
 							<label htmlFor="cartoon">만화</label>
 							<input
 								type="radio"
@@ -201,7 +214,7 @@ const Wrap = styled.div`
 const Book_image = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 40%;
+	width: 400px;
 	height: 100%;
 	padding-left: 20px;
 	padding-right: 20px;

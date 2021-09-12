@@ -1,28 +1,45 @@
 import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { paginate } from '../../utils/paginate';
 import Pagination from './Pagination';
 
-const All_book = (): JSX.Element => {
-	const [booklists, setbooklists] = useState({ bookdata: [], pageSize: 3, currentPage: 1 });
+const Catalog = (props: any): JSX.Element => {
+	const { catal } = props;
+	const [booklists, setbooklists] = useState({ bookdata: [], pageSize: 4, currentPage: 1 });
+	const router = useRouter();
+	const GoDetail = (e): void => {
+		console.log(e.target.className);
+		// router.push(e.target.href);
+	};
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
 				const booklist = [];
-				const list1 = await axios.get('http://192.168.35.111:50101/catalogs');
+				const list1 = await axios.get('http://localhost:50101/catalogs');
 
 				for (const book of list1.data) {
 					let detaillength;
-					book.detail.length > 20
-						? (detaillength = book.detail.substr(0, 20) + '...')
-						: (detaillength = book.detail);
-					booklist.push({
-						...book,
-						detail: detaillength,
-					});
+					if (catal == 'All') {
+						book.detail.length > 20
+							? (detaillength = book.detail.substr(0, 20) + '...')
+							: (detaillength = book.detail);
+						booklist.push({
+							...book,
+							detail: detaillength,
+						});
+					} else if (book.category === catal) {
+						book.detail.length > 20
+							? (detaillength = book.detail.substr(0, 20) + '...')
+							: (detaillength = book.detail);
+						booklist.push({
+							...book,
+							detail: detaillength,
+						});
+					}
 				}
-				setbooklists({ bookdata: booklist, pageSize: 3, currentPage: 1 });
+				setbooklists({ bookdata: booklist, pageSize: 4, currentPage: 1 });
 			} catch (e) {
 				console.log(e);
 			}
@@ -41,9 +58,7 @@ const All_book = (): JSX.Element => {
 		return (
 			<Fragment>
 				<Backg>
-					<Booktable>
-						<p>등록된 책이 없습니다. 정보가 없습니다.</p>;
-					</Booktable>
+					<p>등록된 책이 없습니다. 정보가 없습니다.</p>
 				</Backg>
 			</Fragment>
 		);
@@ -61,7 +76,15 @@ const All_book = (): JSX.Element => {
 					</thead>
 					<tbody>
 						{pagedBooks.map((data) => (
-							<tr key={data.createdAt}>
+							<tr
+								key={data.createdAt}
+								onClick={() =>
+									router.push({
+										pathname: '/DetailBook_page',
+										query: { ...data, createdAt: data.createdAt.substring(0, 10) },
+									})
+								}
+							>
 								<td>
 									<img width="50px" height="70px" src={data.src}></img>
 								</td>
@@ -105,4 +128,13 @@ const Booktable = styled.table`
 	border: 1px solid goldenrod;
 	border-radius: 10px;
 `;
-export default All_book;
+const Wrap = styled.div`
+	display: flex;
+	flex-direction: row;
+	height: 510px;
+	width: 100%;
+	margin: 20px;
+	text-align: center;
+	font-size: 15px;
+`;
+export default Catalog;
