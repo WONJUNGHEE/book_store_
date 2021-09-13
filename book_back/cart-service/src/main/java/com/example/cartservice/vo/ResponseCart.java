@@ -13,14 +13,8 @@ public class ResponseCart {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
-<<<<<<< HEAD
-    private String category;
-=======
-<<<<<<< Updated upstream
-    private String category;
-=======
     private String src;
     private String detail;
->>>>>>> Stashed changes
->>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
+    private String category;
+
 }

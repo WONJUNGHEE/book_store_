@@ -5,6 +5,6 @@ encrypt:
     location: file://../../../apiEncryptionKey.jks
 >>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
 #    location: file:/apiEncryptionKey.jks
-    location: file:///Users/wonjunghee/Desktop/book_store_/book_back/config-service/apiEncryptionKey.jks
+    location: file://../../../apiEncryptionKey.jks
     password: 1q2w3e4r
     alias: apiEncryptionKey
