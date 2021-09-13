@@ -16,8 +16,12 @@ public class UserEntity {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     @Column(nullable = false, length= 50, unique = true)
+=======
+    @Column(nullable = false, unique = true)
+>>>>>>> Stashed changes
 =======
     @Column(nullable = false, unique = true)
 >>>>>>> Stashed changes
@@ -33,6 +37,7 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String phoneNum;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     @Column(nullable = false, length= 100)
@@ -47,6 +52,9 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String phoneNum;
+    @Column(nullable = false)
+>>>>>>> Stashed changes
+=======
     @Column(nullable = false)
 >>>>>>> Stashed changes
 =======

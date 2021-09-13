@@ -41,6 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //                .hasIpAddress(env.getProperty("gateway.ip"))
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <<<<<<< Updated upstream
                 .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.35.111') or hasIpAddress('127.0.0.1')")
@@ -50,6 +51,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 =======
 //                .access("@authorizationChecker.check(request, authentication)")
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+                .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.0.4') or hasIpAddress('127.0.0.1')")
+>>>>>>> Stashed changes
 =======
                 .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.0.4') or hasIpAddress('127.0.0.1')")
 >>>>>>> Stashed changes

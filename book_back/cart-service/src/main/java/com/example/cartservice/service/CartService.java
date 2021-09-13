@@ -11,6 +11,7 @@ public interface CartService {
     Iterable<CartEntity> getCartsByUserId(String userId);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     CartDto getCartsByProductName(CartDto cartDto);
     void updateCart(CartDto cartDto);
@@ -22,6 +23,10 @@ public interface CartService {
 
     void deleteByProductName(String productName);
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    CartDto getCartsByProductName(CartDto cartDto);
+    void updateCart(CartDto cartDto);
+>>>>>>> Stashed changes
 =======
     CartDto getCartsByProductName(CartDto cartDto);
     void updateCart(CartDto cartDto);

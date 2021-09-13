@@ -2,10 +2,14 @@ encrypt:
   key-store:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     location: file://../../../apiEncryptionKey.jks
 =======
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    location: file://../../../apiEncryptionKey.jks
+>>>>>>> Stashed changes
 =======
     location: file://../../../apiEncryptionKey.jks
 >>>>>>> Stashed changes
