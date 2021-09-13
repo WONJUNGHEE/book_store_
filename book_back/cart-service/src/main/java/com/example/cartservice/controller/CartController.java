@@ -16,23 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.*;
 
+@Transactional
 @RestController
 @RequestMapping("/")
 @Slf4j
 public class CartController {
     Environment env;
     CartService cartService;
-    KafkaProducer  kafkaProducer;
+    KafkaProducer kafkaProducer;
     CatalogServiceClient catalogServiceClient;
 
     @Autowired
     public CartController(Environment env, CartService cartService, KafkaProducer kafkaProducer,
                           CatalogServiceClient catalogServiceClient
-                          ) {
+    ) {
         this.env = env;
         this.cartService = cartService;
         this.kafkaProducer = kafkaProducer;
@@ -62,21 +65,21 @@ public class CartController {
 //
 //            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
 //        } else {
-            ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-            CartDto cartDto = mapper.map(cartDetails, CartDto.class);
-            cartDto.setUserId(userId);
-            cartDto.setCategory(responseCatalog.getCategory());
-            CartDto createdOrder = cartService.createCart(cartDto);
+        CartDto cartDto = mapper.map(cartDetails, CartDto.class);
+        cartDto.setUserId(userId);
+        cartDto.setCategory(responseCatalog.getCategory());
+        CartDto createdOrder = cartService.createCart(cartDto);
 
-            kafkaProducer.send("orders", cartDto);
-            ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
+        kafkaProducer.send("orders", cartDto);
+        ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
 
-            log.info("After added carts data");
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
-        }
+        log.info("After added carts data");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+    }
 
 //    }
 
@@ -92,9 +95,16 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /* 장바구니 전체 비우기 */
     @DeleteMapping("/{userId}/carts")
-    public ResponseEntity deleteCart(@PathVariable("userId") String userId) {
+    public void deleteCart(@PathVariable("userId") String userId) {
         cartService.deleteByUserId(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+    }
+
+    /* 장바구니 productName 하나씩 지우기 */
+    @DeleteMapping("/{userId}/carts/{productName}")
+    public void deleteEachCart(@PathVariable("userId") String userId, @PathVariable("productName") String productName) {
+        cartService.deleteByProductName(productName);
     }
 }

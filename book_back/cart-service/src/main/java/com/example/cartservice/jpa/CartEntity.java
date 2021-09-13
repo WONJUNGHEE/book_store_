@@ -16,7 +16,7 @@ public class CartEntity implements Serializable {
     private String cartId;
     @Column(nullable = false)
     private String productId; //
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String productName; //
     @Column(nullable = false)
     private Integer qty; //
