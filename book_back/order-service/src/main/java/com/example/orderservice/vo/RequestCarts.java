@@ -1,3 +1,4 @@
+
 package com.example.orderservice.vo;
 
 import com.example.orderservice.dto.CartDto;
@@ -12,18 +13,7 @@ public class RequestCarts {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
-
-//    private List<UserId> userId;
-//
-//    public class UserId {
-//        private String productId;
-//        private String productName;
-//        private Integer qty;
-//        private Integer unitPrice;
-//        private Integer totalPrice;
-//
-//    }
-
     private List<CartDto> cartList;
 
 }
+

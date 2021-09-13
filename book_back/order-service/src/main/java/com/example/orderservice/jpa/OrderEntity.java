@@ -1,3 +1,4 @@
+
 package com.example.orderservice.jpa;
 
 import lombok.Data;
@@ -29,7 +30,7 @@ public class OrderEntity implements Serializable {
     private String userId;
     @Column(nullable = false, unique = true)
     private String orderId;
-    @Column(nullable = false)
+    @Column
     private String category;
     @Column
     private String detail;
@@ -37,3 +38,4 @@ public class OrderEntity implements Serializable {
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDate orderedAt;
 }
+

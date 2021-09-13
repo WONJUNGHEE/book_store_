@@ -1,3 +1,4 @@
+
 package com.example.orderservice.controller;
 
 import com.example.orderservice.client.CartServiceClient;
@@ -57,6 +58,8 @@ public class OrderController {
         //rest template or openfeign
         boolean isAvailable = true;
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(orderDetails.getProductId());
+        System.out.println(responseCatalog);
+        System.out.println(orderDetails);
         if(responseCatalog != null &&
                 responseCatalog.getQty()-orderDetails.getQty() < 0)
             isAvailable = false;
@@ -85,68 +88,37 @@ public class OrderController {
 
     }
     @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
-                                                                  @RequestBody RequestOrder orderDetails) {
-
-        List<ResponseOrder> responseOrders = new ArrayList<>();
-
+    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId) {
         boolean isAvailable = true;
         List<ResponseCart> responseCart = cartServiceClient.getCart(userId);
-        System.out.println(responseCart);
-
+        List<ResponseOrder> responseOrder = new ArrayList<>();
         /* responseCart를 list로 받는다. */
-//        for (ResponseCart v : responseCart) {
-//            if (v != null &&
-//                    v.getQty() - orderDetails.getQty() < 0)
-//                isAvailable = false;
-//            System.out.println(v.getQty());
-//
-//        }
-        /* 리스트 타입으로 받은 responseCart를 하나하나 수량조사 */
-
-        if (isAvailable) {
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-            /* 매핑 강도 설정 */
-
-            OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
-            orderDto.setUserId(userId);
-
-
-            for (ResponseCart item : responseCart) {
-                OrderDto order = mapper.map(orderDetails, OrderDto.class);
-
+        for (ResponseCart v : responseCart) {
+            ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(v.getProductId());
+            if (v != null &&
+                    responseCatalog.getQty() - v.getQty()  < 0) {
+                isAvailable = false;
+            }
+            if (isAvailable) {
+                ModelMapper mapper = new ModelMapper();
+                mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+                /* 매핑 강도 설정 */
+                OrderDto order = mapper.map(v, OrderDto.class);
                 order.setUserId(userId);
-                order.setCategory(item.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
-                order.setProductId(item.getProductId());
-                order.setProductName(item.getProductName());
+                order.setCategory(v.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+                order.setProductId(v.getProductId());
+                order.setProductName(v.getProductName());
 
                 OrderDto createdOrdersByCart = orderService.createOrderByCart(order);
-                ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
-                System.out.println(createdOrdersByCart);
 
-                responseOrders.add(responseOrder);
+                responseOrder.add(mapper.map(createdOrdersByCart, ResponseOrder.class));
 
-
-
-//            kafkaProducer.send("orders", orderDto);
-
+                kafkaProducer.send("orders",createdOrdersByCart);
+                System.out.println(responseOrder);
+            }
         }
-        System.out.println(responseOrders);
-
-
-        }
-
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseOrders);
-
-        }
-
-
-
-
-
-
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
+    }
 
         @GetMapping("/{userId}/orders")
         public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
@@ -186,4 +158,5 @@ public class OrderController {
             });
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
+
     }

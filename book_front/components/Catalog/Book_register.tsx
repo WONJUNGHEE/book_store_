@@ -1,16 +1,15 @@
 import { Fragment, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { uploadFile } from 'react-s3';
+import S3 from 'react-aws-s3';
 
 const config = {
 	bucketName: 'book-store-5',
 	dirName: 'book-image',
 	region: 'us-west-2',
-	accessKeyId: 'AKIATAAJIQVAP5CT74P6',
-	secretAccessKey: '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',
+	accessKeyId: 'AKIATAAJIQVAFMG5SVCX',
+	secretAccessKey: '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',
 };
-
 const Book_register = (): JSX.Element => {
 	const [file, setFile] = useState<string>('');
 	const [previewURL, setpreviewURL] = useState<string>('');
@@ -82,13 +81,15 @@ const Book_register = (): JSX.Element => {
 		}
 	};
 	const s3 = async () => {
-		await uploadFile(file, config)
+		const reacts3 = new S3(config);
+		await reacts3
+			.uploadFile(file, productName)
 			.then((data) => {
 				console.log(data);
 				registeraxios(data.location);
 			})
 			.catch((err) => {
-				alert(err);
+				console.log(err);
 			});
 	};
 	const handleFileOnChange = (event) => {

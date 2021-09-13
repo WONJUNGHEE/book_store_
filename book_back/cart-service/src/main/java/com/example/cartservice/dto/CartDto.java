@@ -15,4 +15,7 @@ public class CartDto implements Serializable {
     private String userId;
     private String cartId;
     private String category;
+    private String src;
+    private String detail;
+    private Integer find;
 }

@@ -1,0 +1,43 @@
+server:
+  port: 50101
+spring:
+  application:
+    name: catalog-service
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+#  h2:
+#    console:
+#      enabled: true
+#      settings:
+#        web-allow-others: true
+#      path: /h2-console
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    generate-ddl: true
+#    database: mariadb
+#    defer-datasource-initialization: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:33306/testdb
+    username: root
+    password: test1234
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    com.example.catalogservice: DEBUG

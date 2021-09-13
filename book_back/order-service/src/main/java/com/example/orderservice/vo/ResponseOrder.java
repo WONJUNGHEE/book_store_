@@ -1,3 +1,4 @@
+
 package com.example.orderservice.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,3 +21,4 @@ public class ResponseOrder {
     private List<ResponseOrder> responseOrders;
 
 }
+

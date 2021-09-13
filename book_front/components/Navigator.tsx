@@ -54,7 +54,7 @@ const Navigation = (): JSX.Element => {
 							<a href="/Nav/Cartoonpage" onClick={CatalogClick}>
 								만화
 							</a>
-							<a href="/Nav/EduPage" onClick={CatalogClick}>
+							<a href="/Nav/SocialPage" onClick={CatalogClick}>
 								사회
 							</a>
 						</NavItemCatalog>

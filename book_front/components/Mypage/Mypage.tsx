@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import styled from 'styled-components';
-import EditUserInfo from 'components/Mypage/EditUserInfo';
+import EditUserInfo from './EditUserInfo';
 import axios from 'axios';
+import { paginate } from '../../utils/paginate';
+import Pagination from '../Catalog/Pagination';
 
 const MyPage = (): JSX.Element => {
 	const [name, setName] = useState<string>();
@@ -11,24 +13,44 @@ const MyPage = (): JSX.Element => {
 	const [mail, setMail] = useState<string>();
 	const userId = JSON.parse(sessionStorage.getItem('login_info'));
 	const [edit, setedit] = useState<boolean>(false);
+	const [ordered, setordered] = useState({ orderdata: [], pageSize: 4, currentPage: 1 });
 
 	useEffect(() => {
 		const myinfo = async () => {
 			try {
-				await axios.get(`http://localhost:50001/users/${userId[1]}`).then((res) => {
-					setName(res.data.userName),
-						setAddress(res.data.address),
-						setId(res.data.myId),
-						setMail(res.data.email);
-				});
+				const orderlist = [];
+				const orderedd = await axios.get(`http://localhost:50001/users/${userId[1]}`);
+
+				setName(orderedd.data.userName),
+					setAddress(orderedd.data.address),
+					setId(orderedd.data.myId),
+					setMail(orderedd.data.email);
+				for (const list of orderedd.data.orders) {
+					orderlist.push(
+						<OrderList>
+							<div>책 이름 : {list.productId}</div>
+							<div>수량 : {list.qty}</div>
+							<div>구매 가격 : {list.totalPrice}원</div>
+							<div>주문 날짜 : {list.orderedAt}</div>
+						</OrderList>,
+					);
+				}
+				setordered({ orderdata: orderlist, pageSize: 4, currentPage: 1 });
 				edit ? setedit(false) : setedit(true);
 			} catch (e) {
 				console.log(e);
 			}
 		};
 		myinfo();
-	}, [edit]);
-
+		console.log(ordered);
+	}, []);
+	console.log(ordered);
+	const handlePageChange = (page) => {
+		setordered({ ...ordered, currentPage: page });
+	};
+	const { orderdata, pageSize, currentPage } = ordered;
+	const pagedordered = paginate(orderdata, currentPage, pageSize);
+	const { length: count } = ordered.orderdata;
 	return (
 		<Fragment>
 			<Backg>
@@ -43,11 +65,15 @@ const MyPage = (): JSX.Element => {
 						<EditUserInfo />
 					</UserInfo>
 					<OrderInfo>
-						<title>구매내역</title>
-						<div>책 이름 : 취업탈출 넘버원</div>
-						<div>책 가격 : 100만원</div>
-						<div>주문 날짜 : 2021/13/34</div>
+						<h2>주문 내역</h2>
+						<div>{pagedordered}</div>
 					</OrderInfo>
+					<Pagination
+						pageSize={pageSize}
+						itemsCount={count}
+						currentPage={currentPage}
+						onPageChange={handlePageChange}
+					/>
 				</Wrap>
 			</Backg>
 		</Fragment>
@@ -96,4 +122,8 @@ const EditBnt = styled.button`
 	font-size: 13px;
 	border: none;
 `;
+const OrderList = styled.div`
+	padding: 10px;
+`;
+
 export default MyPage;

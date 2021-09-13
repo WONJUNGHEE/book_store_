@@ -1,3 +1,4 @@
+
 package com.example.orderservice.client;
 
 import com.example.orderservice.vo.ResponseCart;
@@ -13,5 +14,6 @@ public interface CartServiceClient {
     @GetMapping("/{userId}/carts")
     List<ResponseCart> getCart(@PathVariable String userId);
 }
+
 
 

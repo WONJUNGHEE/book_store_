@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-service
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/joneconsulting/my-spring-cloud-config
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, busrefresh, refresh, metrics

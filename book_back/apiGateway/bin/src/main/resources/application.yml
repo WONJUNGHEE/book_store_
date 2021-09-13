@@ -1,0 +1,81 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: apigateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/logout
+            - Method=GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/users
+            - Method=POST, GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/**
+            - Method=GET, POST, DELETE, PUT
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        - id: catalog-service
+          predicates:
+            - Path=/catalog-service/**
+          uri: lb://CATALOG-SERVICE
+          filters:
+            - RewritePath=/catalog-service/(?<segment>.*), /$\{segment}
+        - id: order-service
+          predicates:
+            - Path=/order-service/**
+          uri: lb://ORDER-SERVICE
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+        - id: cart-service
+          predicates:
+            - Path=/cart-service/**
+            - Method=GET, POST, DELETE, PUT
+          uri: lb://CART-SERVICE
+          filters:
+            - RewritePath=/cart-service/(?<segment>.*), /$\{segment}
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+#token:
+#  expiration_time: 864000000
+#  secret: user_token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, refresh, health, beans, httptrace, busrefresh

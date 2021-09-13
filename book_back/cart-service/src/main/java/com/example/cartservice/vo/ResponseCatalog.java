@@ -14,4 +14,6 @@ public class ResponseCatalog {
     private Integer qty;
     private Integer unitPrice;
     private String category;
+    private String src;
+    private String detail;
 }

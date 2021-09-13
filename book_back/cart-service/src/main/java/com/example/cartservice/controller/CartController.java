@@ -6,7 +6,7 @@ import com.example.cartservice.jpa.CartEntity;
 import com.example.cartservice.mq.KafkaProducer;
 import com.example.cartservice.service.CartService;
 
-import com.example.cartservice.vo.Requestcart;
+import com.example.cartservice.vo.RequestCart;
 import com.example.cartservice.vo.ResponseCatalog;
 import com.example.cartservice.vo.ResponseCart;
 import lombok.extern.slf4j.Slf4j;
@@ -51,34 +51,28 @@ public class CartController {
 
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
-                                                    @RequestBody Requestcart cartDetails) {
 
-//        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
-//            ModelMapper mapper = new ModelMapper();
-//            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//
-//            CartDto cartDto = cartService.getCartsByProductName(userId,cartDetails.getProductName());
-//            cartDto.setQty(cartDto.getQty()+cartDetails.getQty());
-//            cartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice());
-//            CartDto updatedCart = cartService.updateCart(cartDto);
-//            ResponseCart responseCart = mapper.map(updatedCart,ResponseCart.class);
-//
-//            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
-//        } else {
-        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
+                                                    @RequestBody RequestCart requestCart) {
+        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(requestCart.getProductId());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-        CartDto cartDto = mapper.map(cartDetails, CartDto.class);
+        CartDto cartDto = mapper.map(responseCatalog,CartDto.class);
         cartDto.setUserId(userId);
-        cartDto.setCategory(responseCatalog.getCategory());
-        CartDto createdOrder = cartService.createCart(cartDto);
+        cartDto.setQty(requestCart.getQty());
+        cartDto.setTotalPrice(requestCart.getQty()*requestCart.getUnitPrice());
+        CartDto existCartDto = cartService.getCartsByProductName(cartDto);
 
-        kafkaProducer.send("orders", cartDto);
-        ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
+        if(existCartDto.getFind() == 1){
+            existCartDto.setQty(cartDto.getQty()+existCartDto.getQty());
+            existCartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice()+existCartDto.getTotalPrice());
+            cartService.updateCart(existCartDto);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        cartDto = cartService.createCart(cartDto);
+        ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
+        return ResponseEntity.status(HttpStatus.OK).body(responseCart);
 
-        log.info("After added carts data");
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+
     }
 
 //    }
@@ -108,3 +102,4 @@ public class CartController {
         cartService.deleteByProductName(productName);
     }
 }
+
