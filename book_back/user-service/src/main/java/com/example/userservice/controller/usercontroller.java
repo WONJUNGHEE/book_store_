@@ -36,7 +36,6 @@ public class usercontroller {
         this.userService = userService;
     }
 
-
     @GetMapping("/health_check")
     public String status(HttpServletRequest request) {
 

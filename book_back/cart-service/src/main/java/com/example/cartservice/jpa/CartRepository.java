@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface CartRepository extends CrudRepository<CartEntity, Long> {
     Iterable<CartEntity> findByUserId(String userId);
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     Optional<CartEntity> findByUserIdAndProductName(String userId, String productName);
 =======
@@ -17,4 +18,7 @@ public interface CartRepository extends CrudRepository<CartEntity, Long> {
 
     void deleteByProductName(String productName);
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    Optional<CartEntity> findByUserIdAndProductName(String userId, String productName);
+>>>>>>> Stashed changes
 }

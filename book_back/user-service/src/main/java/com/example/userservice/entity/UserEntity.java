@@ -14,17 +14,22 @@ public class UserEntity {
     @Column(nullable = false)
     private String userId;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     @Column(nullable = false, length= 50, unique = true)
+=======
+    @Column(nullable = false, unique = true)
+>>>>>>> Stashed changes
     private String myId;
     @Column(nullable = false, unique = true)
     private String encryptedPwd;
-    @Column(nullable = false, length= 50)
+    @Column(nullable = false)
     private String userName;
-    @Column(nullable = false, length= 50)
+    @Column(nullable = false)
     private String email;
-    @Column(nullable = false, length= 50)
+    @Column(nullable = false)
     private String phoneNum;
+<<<<<<< Updated upstream
     @Column(nullable = false, length= 100)
 =======
     @Column(nullable = false, unique = true)
@@ -37,6 +42,9 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String phoneNum;
+    @Column(nullable = false)
+>>>>>>> Stashed changes
+=======
     @Column(nullable = false)
 >>>>>>> Stashed changes
     private String address;

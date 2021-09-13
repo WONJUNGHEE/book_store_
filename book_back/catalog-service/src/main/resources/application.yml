@@ -1,5 +1,5 @@
 server:
-  port: 50101
+  port: 0
 spring:
   application:
     name: catalog-service

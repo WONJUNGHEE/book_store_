@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface CartService {
     CartDto createCart(CartDto orderDetails);
     Iterable<CartEntity> getCartsByUserId(String userId);
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     CartDto getCartsByProductName(CartDto cartDto);
     void updateCart(CartDto cartDto);
@@ -20,4 +21,8 @@ public interface CartService {
 
     void deleteByProductName(String productName);
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    CartDto getCartsByProductName(CartDto cartDto);
+    void updateCart(CartDto cartDto);
+>>>>>>> Stashed changes
 }

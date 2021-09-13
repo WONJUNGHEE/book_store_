@@ -62,6 +62,7 @@ public class CartServiceImpl implements CartService {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
         cartRepository.save(cartEntity);
+<<<<<<< Updated upstream
     }
 
     @Override
@@ -72,5 +73,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteByProductName(String productName) {
         cartRepository.deleteByProductName(productName);
+=======
+>>>>>>> Stashed changes
     }
 }

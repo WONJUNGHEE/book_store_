@@ -57,6 +57,7 @@ public class OrderController {
         //rest template or openfeign
         boolean isAvailable = true;
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(orderDetails.getProductId());
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         if (responseCatalog != null &&
                 responseCatalog.getQty() - orderDetails.getQty() < 0)
@@ -66,6 +67,10 @@ public class OrderController {
         if(responseCatalog != null &&
                 responseCatalog.getQty()-orderDetails.getQty() < 0)
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+        if (responseCatalog != null &&
+                responseCatalog.getQty() - orderDetails.getQty() < 0)
+>>>>>>> Stashed changes
             isAvailable = false;
 
         if (isAvailable) {
@@ -93,6 +98,7 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}/carts/orders")
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId, @RequestBody RequestOrder orderDetails) {
         return null;
@@ -128,6 +134,10 @@ public class OrderController {
         }
             return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId, @RequestBody RequestOrder orderDetails) {
+        return null;
+>>>>>>> Stashed changes
     }
 
         @GetMapping("/{userId}/orders")
@@ -135,6 +145,7 @@ public class OrderController {
             Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
 <<<<<<< HEAD
+
 
     @GetMapping("/{userId}/orders")
     public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {

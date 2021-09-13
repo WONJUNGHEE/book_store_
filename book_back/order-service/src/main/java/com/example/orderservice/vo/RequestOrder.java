@@ -10,6 +10,7 @@ public class RequestOrder {
     private String productName;
     private Integer qty;
     private Integer unitPrice;
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     private String productId;
 =======
@@ -17,4 +18,7 @@ public class RequestOrder {
 
     private List<CartDto> cartList;
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    private String productId;
+>>>>>>> Stashed changes
 }

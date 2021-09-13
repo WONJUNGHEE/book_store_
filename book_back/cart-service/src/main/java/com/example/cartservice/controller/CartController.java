@@ -32,6 +32,7 @@ public class CartController {
     CartService cartService;
     KafkaProducer kafkaProducer;
     CatalogServiceClient catalogServiceClient;
+    UserServiceClient userServiceClient;
 
     @Autowired
     public CartController(Environment env, CartService cartService, KafkaProducer kafkaProducer,
@@ -52,7 +53,10 @@ public class CartController {
 
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
                                                     @RequestBody RequestCart requestCart) {
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(requestCart.getProductId());
         ModelMapper mapper = new ModelMapper();
@@ -72,6 +76,7 @@ public class CartController {
         cartDto = cartService.createCart(cartDto);
         ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
         return ResponseEntity.status(HttpStatus.OK).body(responseCart);
+<<<<<<< Updated upstream
 
 =======
                                                     @RequestBody Requestcart cartDetails) {
@@ -102,7 +107,9 @@ public class CartController {
 
         log.info("After added carts data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
->>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+>>>>>>> Stashed changes
+
     }
 
 //    }
