@@ -14,6 +14,4 @@ public class ResponseCart {
     private Integer qty;
     private Integer unitPrice;
     private String category;
-
-    private List<ResponseCart> responseCartList;
 }
