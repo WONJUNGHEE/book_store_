@@ -8,12 +8,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -47,7 +50,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getMyid(), creds.getPwd(),
+                            creds.getMyId(), creds.getPwd(),
                             new ArrayList<>())
             );
 
@@ -63,8 +66,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         String userName = ((User)authResult.getPrincipal()).getUsername();
-        UserDto userDetails = userService.getUserDetailsByMyid(userName);
+        UserDto userDetails = userService.getUserDetailsByMyId(userName);
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,observe");
+        response.setHeader("Access-Control-Expose-Headers","userId,token");
+
+        if(request.getMethod().equals(HttpMethod.OPTIONS.name())){
+            response.setStatus(HttpStatus.OK.value());
+        }
         String token = Jwts.builder()
                 .setSubject(userDetails.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time"))))

@@ -63,4 +63,14 @@ public class CartServiceImpl implements CartService {
         CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
         cartRepository.save(cartEntity);
     }
+
+    @Override
+    public void deleteByUserId(String userId) {
+    cartRepository.deleteByUserId(userId);
+    }
+
+    @Override
+    public void deleteByProductName(String productName) {
+        cartRepository.deleteByProductName(productName);
+    }
 }

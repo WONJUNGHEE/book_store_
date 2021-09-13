@@ -8,5 +8,13 @@ import java.util.Optional;
 
 public interface CartRepository extends CrudRepository<CartEntity, Long> {
     Iterable<CartEntity> findByUserId(String userId);
+<<<<<<< HEAD
     Optional<CartEntity> findByUserIdAndProductName(String userId, String productName);
+=======
+    CartEntity findByUserIdAndProductName(String userId,String productName);
+
+    void deleteByUserId(String userId);
+
+    void deleteByProductName(String productName);
+>>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
 }

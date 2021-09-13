@@ -9,10 +9,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @Configuration
 @EnableWebSecurity
+@CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserService userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -35,13 +37,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 //        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
         http.authorizeRequests()
-                .antMatchers("/**")
+                .antMatchers("/**").permitAll()
 //                .hasIpAddress(env.getProperty("gateway.ip"))
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                 .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.35.111') or hasIpAddress('127.0.0.1')")
 =======
                 .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.0.4') or hasIpAddress('127.0.0.1')")
 >>>>>>> Stashed changes
+=======
+//                .access("@authorizationChecker.check(request, authentication)")
+>>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
                 .and()
                 .addFilter(getAuthenticationFilter());
         ;

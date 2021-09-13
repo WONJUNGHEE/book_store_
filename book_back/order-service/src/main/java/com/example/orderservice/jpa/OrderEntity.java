@@ -15,7 +15,7 @@ public class OrderEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 120, unique = true)
+    @Column(nullable = false, length = 120)
     private String productId;
     @Column(nullable = false)
     private String productName;
@@ -29,7 +29,7 @@ public class OrderEntity implements Serializable {
     private String userId;
     @Column(nullable = false, unique = true)
     private String orderId;
-    @Column(nullable = false)
+    @Column
     private String category;
     @Column
     private String detail;

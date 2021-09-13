@@ -52,13 +52,19 @@ const SignUp = (): JSX.Element => {
 			inputAddress === ''
 		) {
 			alert('회원가입 정보를 모두 입력해주세요.');
-		} else if (sessionStorage.getItem(inputId)) {
-			alert('이미 사용중인 아이디입니다.');
 		} else {
-			SignUpApi(inputName, inputPw, inputId, inputPhone, inputEmail, inputAddress);
-			sessionStorage.setItem('user', JSON.stringify({ id: inputId, pw: inputPw }));
-			alert('회원가입이 완료되었습니다.');
-			closeModal();
+			SignUpApi(inputName, inputPw, inputId, inputPhone, inputEmail, inputAddress)
+				.then((response) => {
+					alert('회원가입이 완료되었습니다.');
+					closeModal();
+				})
+				.catch((error) => {
+					if (error.response.status === 400) {
+						alert('회원정보를 다시 확인해주세요');
+					} else if (error.response.status === 500) {
+						alert('아이디가 이미 존재합니다');
+					}
+				});
 		}
 	};
 	return (

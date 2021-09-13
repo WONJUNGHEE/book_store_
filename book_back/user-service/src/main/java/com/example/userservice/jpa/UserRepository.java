@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByUserId(String userId);
-    UserEntity findByMyid(String myid);
+    UserEntity findByMyId(String myId);
 
     void deleteByUserId(String userId);
 }

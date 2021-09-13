@@ -36,6 +36,7 @@ public class usercontroller {
         this.userService = userService;
     }
 
+
     @GetMapping("/health_check")
     public String status(HttpServletRequest request) {
 
@@ -99,6 +100,7 @@ public class usercontroller {
     /* 사용자 탈퇴 */
     @DeleteMapping("/users/{userId}")
     public void deleteByUserId(@PathVariable("userId") String userId) {
+
         userService.deleteByUserId(userId);
     }
 

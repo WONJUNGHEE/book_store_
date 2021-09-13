@@ -1,19 +1,46 @@
+import React, { useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import styled from 'styled-components';
+import EditUserInfo from 'components/Mypage/EditUserInfo';
+import axios from 'axios';
 
 const MyPage = (): JSX.Element => {
+	const [name, setName] = useState<string>();
+	const [id, setId] = useState<string>();
+	const [address, setAddress] = useState<string>();
+	const [mail, setMail] = useState<string>();
+	const userId = JSON.parse(sessionStorage.getItem('login_info'));
+	const [edit, setedit] = useState<boolean>(false);
+
+	useEffect(() => {
+		const myinfo = async () => {
+			try {
+				await axios.get(`http://localhost:50001/users/${userId[1]}`).then((res) => {
+					setName(res.data.userName),
+						setAddress(res.data.address),
+						setId(res.data.myId),
+						setMail(res.data.email);
+				});
+				edit ? setedit(false) : setedit(true);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		myinfo();
+	}, [edit]);
+
 	return (
 		<Fragment>
 			<Backg>
 				<Wrap>
 					<UserInfo>
 						<title>회원 정보</title>
-						<div>아이디 : wjdgml0078@naver.com</div>
-						<div>비밀번호 : *****</div>
-						<div>이름 : 원정희</div>
-						<div>이메일 : wjdgml0078@naver.com</div>
-						<div>주소 : 서울시 누울수 있는 어디든</div>
-						<EditBnt>정보 수정</EditBnt>
+						<div>아이디 : {id}</div>
+						<div>비밀번호 : ********</div>
+						<div>이름 : {name}</div>
+						<div>이메일 : {mail}</div>
+						<div>주소 : {address}</div>
+						<EditUserInfo />
 					</UserInfo>
 					<OrderInfo>
 						<title>구매내역</title>

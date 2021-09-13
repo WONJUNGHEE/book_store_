@@ -13,6 +13,11 @@ public class ResponseCatalog {
     private Integer qty;
     private Integer unitPrice;
     private String category;
+<<<<<<< HEAD
     private String src;
     private String detail;
+=======
+    private String detail;
+    private String src;
+>>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
 }

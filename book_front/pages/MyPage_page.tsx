@@ -1,14 +1,16 @@
+
 import React, { Fragment } from 'react';
-import MyPage from '../components/Mypage';
+import MyPage from '../components/Mypage/Mypage';
 
 // import styled from 'styled-components';
 
-const LoginPage = () => {
+const MyPage_page = () => {
 	return (
 		<Fragment>
 			<MyPage />
+			
 		</Fragment>
 	);
 };
 
-export default LoginPage;
+export default MyPage_page;

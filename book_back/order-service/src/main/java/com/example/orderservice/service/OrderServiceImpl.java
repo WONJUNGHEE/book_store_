@@ -55,4 +55,19 @@ public class OrderServiceImpl implements OrderService {
     public Iterable<OrderEntity> getOrdersByUserIdAndOrderedAt(String userId, LocalDate sDate, LocalDate eDate) {
         return orderRepository.findByUserIdAndOrderedAtBetween(userId,sDate,eDate);
     }
+
+    @Override
+    public OrderDto createOrderByCart(OrderDto order) {
+        order.setOrderId(UUID.randomUUID().toString());
+        order.setTotalPrice(order.getQty() * order.getUnitPrice());
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        OrderEntity orderEntity = mapper.map(order, OrderEntity.class);
+
+        orderRepository.save(orderEntity);
+
+        OrderDto returnValue = mapper.map(orderEntity, OrderDto.class);
+
+        return returnValue;
+    }
 }

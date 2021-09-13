@@ -12,4 +12,6 @@ public interface OrderService {
     OrderDto getOrderByOrderId(String orderId);
     Iterable<OrderEntity> getOrdersByUserId(String userId);
     Iterable<OrderEntity> getOrdersByUserIdAndOrderedAt(String userId, LocalDate sDate, LocalDate eDate);
+
+    OrderDto createOrderByCart(OrderDto order);
 }
