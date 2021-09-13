@@ -52,11 +52,11 @@ const EditUserInfo = (): JSX.Element => {
 			alert('정보를 모두 입력해주세요.');
 		} else {
 			axios
-				.put(`http://192.168.35.111:50001/users/${userId[1]}`, {
-					name: inputName,
-					myid: userId[2],
+				.put(`http://localhost:50001/users/${userId[1]}`, {
+					userName: inputName,
+					myId: userId[2],
 					pwd: inputPw,
-					phonenum: inputPhone,
+					phoneNum: inputPhone,
 					email: inputEmail,
 					address: inputAddress,
 				})

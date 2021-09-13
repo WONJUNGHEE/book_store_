@@ -8,22 +8,15 @@ import com.example.orderservice.mq.KafkaProducer;
 import com.example.orderservice.mq.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -92,20 +85,77 @@ public class OrderController {
 
     }
     @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId) {
-        ResponseCart responseCart = cartServiceClient.getCart(userId);
-        return null; // 미완성
-    }
+    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
+                                                                  @RequestBody RequestOrder orderDetails) {
+
+        List<ResponseOrder> responseOrders = new ArrayList<>();
+
+        boolean isAvailable = true;
+        List<ResponseCart> responseCart = cartServiceClient.getCart(userId);
+        System.out.println(responseCart);
+
+        /* responseCart를 list로 받는다. */
+//        for (ResponseCart v : responseCart) {
+//            if (v != null &&
+//                    v.getQty() - orderDetails.getQty() < 0)
+//                isAvailable = false;
+//            System.out.println(v.getQty());
+//
+//        }
+        /* 리스트 타입으로 받은 responseCart를 하나하나 수량조사 */
+
+        if (isAvailable) {
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            /* 매핑 강도 설정 */
+
+            OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
+            orderDto.setUserId(userId);
 
 
-    @GetMapping("/{userId}/orders")
-    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
-        Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
+            for (ResponseCart item : responseCart) {
+                OrderDto order = mapper.map(orderDetails, OrderDto.class);
 
-        List<ResponseOrder> result = new ArrayList<>();
-        orderList.forEach(v -> {
-            result.add(new ModelMapper().map(v, ResponseOrder.class));
-        });
+                order.setUserId(userId);
+                order.setCategory(item.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+                order.setProductId(item.getProductId());
+                order.setProductName(item.getProductName());
+
+                OrderDto createdOrdersByCart = orderService.createOrderByCart(order);
+                ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
+                System.out.println(createdOrdersByCart);
+
+                responseOrders.add(responseOrder);
+
+
+
+//            kafkaProducer.send("orders", orderDto);
+
+        }
+        System.out.println(responseOrders);
+
+
+        }
+
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseOrders);
+
+        }
+
+
+
+
+
+
+
+        @GetMapping("/{userId}/orders")
+        public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
+            Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
+
+            List<ResponseOrder> result = new ArrayList<>();
+            orderList.forEach(v -> {
+                result.add(new ModelMapper().map(v, ResponseOrder.class));
+            });
 //        Random rnd = new Random(System.currentTimeMillis());
 //        int time = rnd.nextInt(3);
 //        if (time % 2 == 0) {
@@ -116,24 +166,24 @@ public class OrderController {
 //                log.warn(ex.getMessage());
 //            }
 //        }
-        log.info("After retrieve orders data");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
+            log.info("After retrieve orders data");
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
 
-    @RequestMapping("{userId}/date")  // 쿼리스트링 userId?sDate=2012-12-12 & eDate=2020-12-12 @ReuqestParam
-    public ResponseEntity<List<ResponseOrder>> getOrdersByDate(@PathVariable("userId") String userId,
-                                                               @RequestParam("sDate") String s_Date,
-                                                               @RequestParam("eDate") String e_Date ) {
+        @RequestMapping("{userId}/date")  // 쿼리스트링 userId?sDate=2012-12-12 & eDate=2020-12-12 @ReuqestParam
+        public ResponseEntity<List<ResponseOrder>> getOrdersByDate(@PathVariable("userId") String userId,
+                @RequestParam("sDate") String s_Date,
+                @RequestParam("eDate") String e_Date ) {
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        LocalDate sDate = mapper.map(s_Date,LocalDate.class);
-        LocalDate eDate = mapper.map(e_Date,LocalDate.class);
-        Iterable<OrderEntity> orderList = orderService.getOrdersByUserIdAndOrderedAt(userId,sDate,eDate);
-        List<ResponseOrder> result = new ArrayList<>();
-        orderList.forEach(v -> {
-            result.add(new ModelMapper().map(v, ResponseOrder.class));
-        });
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            LocalDate sDate = mapper.map(s_Date,LocalDate.class);
+            LocalDate eDate = mapper.map(e_Date,LocalDate.class);
+            Iterable<OrderEntity> orderList = orderService.getOrdersByUserIdAndOrderedAt(userId,sDate,eDate);
+            List<ResponseOrder> result = new ArrayList<>();
+            orderList.forEach(v -> {
+                result.add(new ModelMapper().map(v, ResponseOrder.class));
+            });
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
     }
-}

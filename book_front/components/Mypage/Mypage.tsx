@@ -11,15 +11,23 @@ const MyPage = (): JSX.Element => {
 	const [mail, setMail] = useState<string>();
 	const userId = JSON.parse(sessionStorage.getItem('login_info'));
 	const [edit, setedit] = useState<boolean>(false);
-	const handleedit = () => {
-		edit ? setedit(false) : setedit(true);
-	};
-	axios.get(`http://192.168.35.111:50001/users/${userId[1]}`).then((res) => {
-		setName(res.data.name),
-			setAddress(res.data.address),
-			setId(res.data.myid),
-			setMail(res.data.email);
-	});
+
+	useEffect(() => {
+		const myinfo = async () => {
+			try {
+				await axios.get(`http://localhost:50001/users/${userId[1]}`).then((res) => {
+					setName(res.data.userName),
+						setAddress(res.data.address),
+						setId(res.data.myId),
+						setMail(res.data.email);
+				});
+				edit ? setedit(false) : setedit(true);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		myinfo();
+	}, [edit]);
 
 	return (
 		<Fragment>

@@ -12,5 +12,22 @@ public class RequestCarts {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
+<<<<<<< HEAD
     private List<CartDto> cartList;
+=======
+
+//    private List<UserId> userId;
+//
+//    public class UserId {
+//        private String productId;
+//        private String productName;
+//        private Integer qty;
+//        private Integer unitPrice;
+//        private Integer totalPrice;
+//
+//    }
+
+    private List<CartDto> cartList;
+
+>>>>>>> 538ce06c378ec7b83669b1964f36a3afc1bf4aa1
 }

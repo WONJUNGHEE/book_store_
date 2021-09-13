@@ -23,6 +23,6 @@
     "**/*.tsx",
     "config/config.js",
     "next.config.js"
-  ],
+, "components/Upload.js"  ],
   "exclude": ["node_modules"]
 }

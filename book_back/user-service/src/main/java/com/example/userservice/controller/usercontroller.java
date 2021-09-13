@@ -100,6 +100,7 @@ public class usercontroller {
     /* 사용자 탈퇴 */
     @DeleteMapping("/users/{userId}")
     public void deleteByUserId(@PathVariable("userId") String userId) {
+
         userService.deleteByUserId(userId);
     }
 
