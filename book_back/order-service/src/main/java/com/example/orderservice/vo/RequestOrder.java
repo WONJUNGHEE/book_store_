@@ -13,6 +13,7 @@ public class RequestOrder {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     private String productId;
 =======
@@ -20,6 +21,9 @@ public class RequestOrder {
 
     private List<CartDto> cartList;
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    private String productId;
+>>>>>>> Stashed changes
 =======
     private String productId;
 >>>>>>> Stashed changes

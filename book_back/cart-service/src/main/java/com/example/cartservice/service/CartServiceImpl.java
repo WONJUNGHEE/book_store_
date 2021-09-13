@@ -65,6 +65,7 @@ public class CartServiceImpl implements CartService {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     }
 
     @Override
@@ -75,6 +76,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteByProductName(String productName) {
         cartRepository.deleteByProductName(productName);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

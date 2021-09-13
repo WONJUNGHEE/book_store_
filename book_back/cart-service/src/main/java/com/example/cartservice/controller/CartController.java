@@ -56,7 +56,10 @@ public class CartController {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -82,6 +85,7 @@ public class CartController {
         cartDto = cartService.createCart(cartDto);
         ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
         return ResponseEntity.status(HttpStatus.OK).body(responseCart);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
@@ -115,6 +119,8 @@ public class CartController {
 
         log.info("After added carts data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
