@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CatalogRepository extends CrudRepository<CatalogEntity,Long> {
     CatalogEntity findByProductId(String productId);
+
     CatalogEntity findByProductName(String productName);
     Iterable<CatalogEntity> findByCategory(String category);
     void deleteByProductId(String productId);

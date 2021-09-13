@@ -8,5 +8,4 @@ public class RequestCart {
     private String productName;
     private Integer qty;
     private Integer unitPrice;
-
 }

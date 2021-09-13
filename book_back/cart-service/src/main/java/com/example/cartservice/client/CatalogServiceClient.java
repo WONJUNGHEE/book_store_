@@ -10,5 +10,4 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CatalogServiceClient {
     @GetMapping("/catalogs/pid/{productId}")
     ResponseCatalog getCatalog(@PathVariable String productId);
-
 }

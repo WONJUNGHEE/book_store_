@@ -37,7 +37,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/**")
 //                .hasIpAddress(env.getProperty("gateway.ip"))
+<<<<<<< Updated upstream
                 .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.35.111') or hasIpAddress('127.0.0.1')")
+=======
+                .access("hasIpAddress('172.18.0.5') or hasIpAddress('192.168.0.4') or hasIpAddress('127.0.0.1')")
+>>>>>>> Stashed changes
                 .and()
                 .addFilter(getAuthenticationFilter());
         ;

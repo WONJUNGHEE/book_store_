@@ -33,13 +33,13 @@ import java.util.*;
 public class OrderController {
     Environment env;
     OrderService orderService;
-    KafkaProducer  kafkaProducer;
+    KafkaProducer kafkaProducer;
     CatalogServiceClient catalogServiceClient;
     CartServiceClient cartServiceClient;
     OrderProducer orderProducer;
 
     @Autowired
-    public OrderController(Environment env, OrderService orderService,KafkaProducer kafkaProducer,
+    public OrderController(Environment env, OrderService orderService, KafkaProducer kafkaProducer,
                            CatalogServiceClient catalogServiceClient, CartServiceClient cartServiceClient,
                            OrderProducer orderProducer) {
         this.env = env;
@@ -64,8 +64,8 @@ public class OrderController {
         //rest template or openfeign
         boolean isAvailable = true;
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(orderDetails.getProductId());
-        if(responseCatalog != null &&
-                responseCatalog.getQty()-orderDetails.getQty() < 0)
+        if (responseCatalog != null &&
+                responseCatalog.getQty() - orderDetails.getQty() < 0)
             isAvailable = false;
 
         if (isAvailable) {
@@ -91,11 +91,12 @@ public class OrderController {
         }
 
     }
+
     @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId) {
-        ResponseCart responseCart = cartServiceClient.getCart(userId);
-        return null; // 미완성
+    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId, @RequestBody RequestOrder orderDetails) {
+        return null;
     }
+
 
 
     @GetMapping("/{userId}/orders")
