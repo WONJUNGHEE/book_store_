@@ -94,44 +94,49 @@ public class OrderController {
     }
     @PostMapping("/{userId}/carts/orders")
     public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
-                                                               @RequestBody RequestOrder orderDetails) {
+                                                               @RequestBody RequestCarts orderDetails) {
 
 //        Iterable<OrderEntity> orderListbyCart = CartServiceClient.getCart(orderDetails.getUserId());
 
         List<ResponseOrder> responseOrders = new ArrayList<>();
 
         boolean isAvailable = true;
-        ResponseCart responseCart = cartServiceClient.getCart(orderDetails.getUserId());
+        ResponseCart responseCart = cartServiceClient.getCart(orderDetails.getProductId());
+        System.out.println(responseOrders);
 
-        if(responseCart != null &&
-                responseCart.getQty()-orderDetails.getQty() < 0)
+        if (responseCart != null &&
+                responseCart.getQty() - orderDetails.getQty() < 0)
             isAvailable = false;
 
         /* cartServiceClient.getCart(userId) 에서 리스트로 넘어오는데 그러면 responseCart 가 리스트 타입으로 받아지는가? */
         if (isAvailable) {
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        /* 매핑 강도 설정 */
+            ModelMapper mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            /* 매핑 강도 설정 */
 
-        OrderDto orderDto = mapper.map(orderDetails, OrderDto.class); /* orderDto에 v 를 넣어준다(매핑한다) */
-        orderDto.setUserId(userId);
+            OrderDto orderDto = mapper.map(orderDetails, OrderDto.class); /* orderDto에 v 를 넣어준다(매핑한다) */
+            orderDto.setUserId(userId);
 
-        for(CartDto cartDto : orderDetails.getCartList()){
-            /* responseCart 의 아이템 하나하나를 v */
+            for (CartDto cartDto : orderDetails.getCartList()) {
+                /* responseCart 의 아이템 하나하나를 v */
 
-            cartDto.setCategory(cartDto.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
-            cartDto.setProductId(cartDto.getProductId());
-            cartDto.setProductName(cartDto.getProductName());
+                cartDto.setCategory(cartDto.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+                cartDto.setProductId(cartDto.getProductId());
+                cartDto.setProductName(cartDto.getProductName());
 
-            OrderDto createdOrdersByCart = orderService.createOrderByCart(orderDto);
-            ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
+                OrderDto createdOrdersByCart = orderService.createOrderByCart(orderDto);
+                ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
 
-            responseOrders.add(responseOrder);
+                responseOrders.add(responseOrder);
 
 //            kafkaProducer.send("orders", orderDto);
-        };
+            }
+            ;
+        }
+        System.out.println(responseOrders);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrders);
+
 
     }
 

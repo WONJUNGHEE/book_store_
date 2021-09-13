@@ -5,7 +5,8 @@ import com.example.cartservice.dto.*;
 import com.example.cartservice.jpa.CartEntity;
 import com.example.cartservice.mq.KafkaProducer;
 import com.example.cartservice.service.CartService;
-import com.example.cartservice.vo.RequestCart;
+
+import com.example.cartservice.vo.Requestcart;
 import com.example.cartservice.vo.ResponseCatalog;
 import com.example.cartservice.vo.ResponseCart;
 import lombok.extern.slf4j.Slf4j;
@@ -47,20 +48,20 @@ public class CartController {
 
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
-                                                    @RequestBody RequestCart cartDetails) {
+                                                    @RequestBody Requestcart cartDetails) {
 
-        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-            CartDto cartDto = cartService.getCartsByProductName(userId,cartDetails.getProductName());
-            cartDto.setQty(cartDto.getQty()+cartDetails.getQty());
-            cartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice());
-            CartDto updatedCart = cartService.updateCart(cartDto);
-            ResponseCart responseCart = mapper.map(updatedCart,ResponseCart.class);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
-        } else {
+//        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
+//            ModelMapper mapper = new ModelMapper();
+//            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//
+//            CartDto cartDto = cartService.getCartsByProductName(userId,cartDetails.getProductName());
+//            cartDto.setQty(cartDto.getQty()+cartDetails.getQty());
+//            cartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice());
+//            CartDto updatedCart = cartService.updateCart(cartDto);
+//            ResponseCart responseCart = mapper.map(updatedCart,ResponseCart.class);
+//
+//            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+//        } else {
             ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
             ModelMapper mapper = new ModelMapper();
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -77,7 +78,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
         }
 
-    }
+//    }
 
     @GetMapping("/{userId}/carts")
     public ResponseEntity<List<ResponseCart>> getOrder(@PathVariable("userId") String userId) throws Exception {
