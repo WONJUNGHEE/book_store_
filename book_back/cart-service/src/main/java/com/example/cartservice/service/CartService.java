@@ -12,4 +12,6 @@ public interface CartService {
     CartDto updateCart(CartDto cartDto);
 
     void deleteByUserId(String userId);
+
+    void deleteByProductName(String productName);
 }
