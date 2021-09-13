@@ -13,4 +13,5 @@ public class ResponseCart {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
+    private String category;
 }

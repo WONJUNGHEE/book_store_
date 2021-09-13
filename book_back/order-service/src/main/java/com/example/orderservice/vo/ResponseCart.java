@@ -13,5 +13,9 @@ public class ResponseCart {
     private String productName;
     private Integer qty;
     private Integer unitPrice;
+<<<<<<< Updated upstream
+=======
+    private Integer totalPrice;
+>>>>>>> Stashed changes
     private String category;
 }
