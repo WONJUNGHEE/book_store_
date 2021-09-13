@@ -1,15 +1,18 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { RootState } from '../reducers';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../reducers/loginReducer';
 
 const Navigation = (): JSX.Element => {
 	const { id, admin_check } = useSelector((state: RootState) => state.loginReducer);
 	const [inputNav, setInputNav] = useState<boolean>(false);
+
 	const router = useRouter();
 	const dispatch = useDispatch();
+
 	const handleClick = (e) => {
 		e.preventDefault();
 		router.push(e.target.href);
@@ -26,6 +29,7 @@ const Navigation = (): JSX.Element => {
 	};
 	const CatalogClick = (e): void => {
 		e.preventDefault();
+
 		router.push(e.target.href);
 		setInputNav(false);
 	};
@@ -41,16 +45,16 @@ const Navigation = (): JSX.Element => {
 					<NavItem>
 						<a onClick={openNav}>카테고리</a>
 						<NavItemCatalog className={inputNav ? 'open' : 'close'}>
-							<a href="/CatalogPage" onClick={CatalogClick}>
+							<a href="/Nav/CatalogPage" onClick={CatalogClick}>
 								전체보기
 							</a>
-							<a href="/EduPage" onClick={CatalogClick}>
+							<a href="/Nav/EduPage" onClick={CatalogClick}>
 								교육
 							</a>
-							<a href="/Cartoonpage" onClick={CatalogClick}>
+							<a href="/Nav/Cartoonpage" onClick={CatalogClick}>
 								만화
 							</a>
-							<a href="/SocialPage" onClick={CatalogClick}>
+							<a href="/Nav/EduPage" onClick={CatalogClick}>
 								사회
 							</a>
 						</NavItemCatalog>

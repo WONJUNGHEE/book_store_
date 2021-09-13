@@ -97,5 +97,4 @@ public class CartController {
         cartService.deleteByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
 }
