@@ -12,23 +12,44 @@ const DetailBook = (props): JSX.Element => {
 		try {
 			await axios
 				.post(`http://localhost:50005/${userId[1]}/carts`, {
-					productId: props.productId,
-					productName: props.productName,
+					productId: props.data.productId,
+					productName: props.data.productName,
 					qty: bookcnt,
-					unitPrice: props.unitPrice,
+					unitPrice: props.data.unitPrice,
 				})
 				.then((res) => {
 					console.log(res);
 				});
 		} catch (e) {
 			console.log(e);
+			console.log(props.productId);
+		}
+	};
+
+	const purchchase = async () => {
+		try {
+			await axios
+				.post(`http://localhost:40000/${userId[1]}/orders`, {
+					productId: props.data.productId,
+					productName: props.data.productName,
+					qty: bookcnt,
+					unitPrice: props.data.unitPrice,
+				})
+				.then((res) => {
+					console.log(res);
+				});
+		} catch (e) {
+			console.log(e);
+			console.log(props.productId);
 		}
 	};
 	const handlecart = () => {
 		cartgo();
+		alert('장바구니에 담았습니다.');
 	};
 	const handlepurchase = () => {
-		cartgo();
+		purchchase();
+		alert('구매완료');
 	};
 	return (
 		<Fragment>

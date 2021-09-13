@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Transactional
 @RestController
 @RequestMapping("/")
 @Slf4j
@@ -47,35 +49,25 @@ public class CartController {
 
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
-                                                    @RequestBody RequestCart cartDetails) {
+                                                    @RequestBody RequestCart requestCart) {
+        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(requestCart.getProductId());
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        CartDto cartDto = mapper.map(responseCatalog,CartDto.class);
+        cartDto.setUserId(userId);
+        cartDto.setQty(requestCart.getQty());
+        cartDto.setTotalPrice(requestCart.getQty()*requestCart.getUnitPrice());
+        CartDto existCartDto = cartService.getCartsByProductName(cartDto);
 
-        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-            CartDto cartDto = cartService.getCartsByProductName(userId,cartDetails.getProductName());
-            cartDto.setQty(cartDto.getQty()+cartDetails.getQty());
-            cartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice());
-            CartDto updatedCart = cartService.updateCart(cartDto);
-            ResponseCart responseCart = mapper.map(updatedCart,ResponseCart.class);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
-        } else {
-            ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(cartDetails.getProductId());
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-            CartDto cartDto = mapper.map(cartDetails, CartDto.class);
-            cartDto.setUserId(userId);
-            cartDto.setCategory(responseCatalog.getCategory());
-            CartDto createdOrder = cartService.createCart(cartDto);
-
-            kafkaProducer.send("orders", cartDto);
-            ResponseCart responseCart = mapper.map(createdOrder, ResponseCart.class);
-
-            log.info("After added carts data");
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+        if(existCartDto.getFind() == 1){
+            existCartDto.setQty(cartDto.getQty()+existCartDto.getQty());
+            existCartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice()+existCartDto.getTotalPrice());
+            cartService.updateCart(existCartDto);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
+        cartDto = cartService.createCart(cartDto);
+        ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
+        return ResponseEntity.status(HttpStatus.OK).body(responseCart);
 
     }
 
@@ -90,10 +82,16 @@ public class CartController {
         log.info("After retrieve carts data");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
+    /* 장바구니 전체 비우기 */
     @DeleteMapping("/{userId}/carts")
-    public ResponseEntity deleteCart(@PathVariable("userId") String userId) {
+    public void deleteCart(@PathVariable("userId") String userId) {
         cartService.deleteByUserId(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+    }
+    /* 장바구니 productName 하나씩 지우기 */
+    @DeleteMapping("/{userId}/carts/{productName}")
+    public void deleteEachCart(@PathVariable("userId") String userId, @PathVariable("productName") String productName) {
+        cartService.deleteByProductName(productName);
     }
 }
+

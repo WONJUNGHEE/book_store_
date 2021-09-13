@@ -8,23 +8,15 @@ import com.example.orderservice.mq.KafkaProducer;
 import com.example.orderservice.mq.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.message.LeaderChangeMessage;
-import org.apache.tomcat.jni.Local;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -65,6 +57,8 @@ public class OrderController {
         //rest template or openfeign
         boolean isAvailable = true;
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(orderDetails.getProductId());
+        System.out.println(responseCatalog);
+        System.out.println(orderDetails);
         if(responseCatalog != null &&
                 responseCatalog.getQty()-orderDetails.getQty() < 0)
             isAvailable = false;
@@ -74,7 +68,7 @@ public class OrderController {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
             OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
-            orderDto.setProductName(responseCatalog.getProductName());
+            orderDto.setUserId(userId);
             orderDto.setCategory(responseCatalog.getCategory());
             orderDto.setProductId(responseCatalog.getProductId());
             orderDto.setProductName(responseCatalog.getProductName());
@@ -93,51 +87,37 @@ public class OrderController {
 
     }
     @PostMapping("/{userId}/carts/orders")
-    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId,
-                                                                  @RequestBody RequestOrder orderDetails) {
-
-//        Iterable<OrderEntity> orderListbyCart = CartServiceClient.getCart(orderDetails.getUserId());
-
-        List<ResponseOrder> responseOrders = new ArrayList<>();
-
+    public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId) {
         boolean isAvailable = true;
-        ResponseCart responseCart = cartServiceClient.getCart(orderDetails.getUserId());
-
-        if (responseCart != null &&
-                responseCart.getQty() - orderDetails.getQty() < 0)
-            isAvailable = false;
-
-        /* cartServiceClient.getCart(userId) 에서 리스트로 넘어오는데 그러면 responseCart 가 리스트 타입으로 받아지는가? */
-        if (isAvailable) {
-            ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-            /* 매핑 강도 설정 */
-
-            OrderDto orderDto = mapper.map(orderDetails, OrderDto.class); /* orderDto에 v 를 넣어준다(매핑한다) */
-            orderDto.setUserId(userId);
-
-            for (CartDto cartDto : orderDetails.getCartList()) {
-                /* responseCart 의 아이템 하나하나를 v */
-
-                cartDto.setCategory(cartDto.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
-                cartDto.setProductId(cartDto.getProductId());
-                cartDto.setProductName(cartDto.getProductName());
-
-                OrderDto createdOrdersByCart = orderService.createOrderByCart(orderDto);
-                ResponseOrder responseOrder = mapper.map(createdOrdersByCart, ResponseOrder.class);
-
-                responseOrders.add(responseOrder);
-
-//            kafkaProducer.send("orders", orderDto);
+        List<ResponseCart> responseCart = cartServiceClient.getCart(userId);
+        List<ResponseOrder> responseOrder = new ArrayList<>();
+        /* responseCart를 list로 받는다. */
+        for (ResponseCart v : responseCart) {
+            ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(v.getProductId());
+            if (v != null &&
+                    responseCatalog.getQty() - v.getQty()  < 0) {
+                isAvailable = false;
             }
+            if (isAvailable) {
+                ModelMapper mapper = new ModelMapper();
+                mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+                /* 매핑 강도 설정 */
+                OrderDto order = mapper.map(v, OrderDto.class);
+                order.setUserId(userId);
+                order.setCategory(v.getCategory()); /* orderDto에 responseCart 아이템 v 의 category를 넣어준다 */
+                order.setProductId(v.getProductId());
+                order.setProductName(v.getProductName());
 
+                OrderDto createdOrdersByCart = orderService.createOrderByCart(order);
+
+                responseOrder.add(mapper.map(createdOrdersByCart, ResponseOrder.class));
+
+                kafkaProducer.send("orders",createdOrdersByCart);
+                System.out.println(responseOrder);
+            }
         }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseOrders);
-
-        }
-
-
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
+    }
 
         @GetMapping("/{userId}/orders")
         public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {

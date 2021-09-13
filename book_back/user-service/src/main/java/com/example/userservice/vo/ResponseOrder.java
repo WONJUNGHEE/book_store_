@@ -1,6 +1,8 @@
 package com.example.userservice.vo;
 
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -9,7 +11,7 @@ public class ResponseOrder {
     private Integer qty;
     private Integer unitPrice;
     private Integer totalPrice;
-    private Date createAt;
+    private LocalDate orderedAt;
 
     private String orderId;
 }

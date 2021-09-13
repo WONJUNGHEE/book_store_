@@ -63,7 +63,7 @@ const Purchase = (props: any): JSX.Element => {
 					</tbody>
 				</Booktable>
 
-				<InputData>
+				{/* <InputData>
 					<label htmlFor="productId">제품 ID</label>
 					<input
 						id="productId"
@@ -124,9 +124,9 @@ const Purchase = (props: any): JSX.Element => {
 							onChange={handlecategory}
 						/>
 						<label htmlFor="social">사회</label>
-						<ReigsterButton onClick={registerClick}>등록 하기</ReigsterButton>
-					</div>
-				</InputData>
+						<ReigsterButton onClick={registerClick}>등록 하기</ReigsterButton> */}
+				{/* </div>
+				</InputData> */}
 			</Backg>
 		</Fragment>
 	);

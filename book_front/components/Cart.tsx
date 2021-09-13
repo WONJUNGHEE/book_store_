@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 const Cart = (props: any): JSX.Element => {
 	const { catal } = props;
 	const [booklists, setbooklists] = useState([]);
+
 	const router = useRouter();
 	const userId = JSON.parse(sessionStorage.getItem('login_info'));
 
@@ -14,7 +15,6 @@ const Cart = (props: any): JSX.Element => {
 			try {
 				const cartlist = [];
 				await axios.get(`http://localhost:50005/${userId[1]}/carts`).then((res) => {
-					console.log(res.data);
 					for (const cart of res.data) {
 						cartlist.push(cart);
 					}
@@ -26,44 +26,58 @@ const Cart = (props: any): JSX.Element => {
 		};
 		fetchUsers();
 	}, []);
-
+	const cartdel = async (e) => {
+		try {
+			await axios
+				.delete(`http://localhost:50005/${userId[1]}/carts/${e.target.value}`)
+				.then((res) => {
+					alert('삭제되었습니다.');
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const cartorders = async (e) => {
+		try {
+			await axios.post(`http://localhost:40000/${userId[1]}/carts/orders`).then((res) => {
+				alert('주문이 완료 되었습니다.');
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<Fragment>
 			<Backg>
+				<h2>장바구니</h2>
 				<Booktable>
 					<thead>
 						<tr>
 							<th></th>
 							<th>제목</th>
-							<th>요약</th>
 							<th>가격</th>
+							<th>개수</th>
 						</tr>
 					</thead>
 					<tbody>
 						{booklists.map((data) => (
-							<tr
-								key={data.createdAt}
-								onClick={() =>
-									router.push({
-										pathname: '/DetailBook_page',
-										query: { ...data, createdAt: data.createdAt.substring(0, 10) },
-									})
-								}
-							>
+							<tr key={data.productId}>
 								<td>
 									<img width="50px" height="70px" src={data.src}></img>
 								</td>
 								<td>{data.productName}</td>
-								<td>{data.detail}</td>
 								<td>{data.unitPrice}</td>
+								<td>{data.qty}</td>
 								<td>
-									<button>삭제</button>
+									<button value={data.productName} onClick={cartdel}>
+										삭제
+									</button>
 								</td>
 							</tr>
 						))}
 					</tbody>
 				</Booktable>
-				<button>주문하기</button>
+				<button onClick={cartorders}>주문하기</button>
 			</Backg>
 		</Fragment>
 	);

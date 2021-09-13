@@ -57,12 +57,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createOrderByCart(OrderDto orderDto) {
-        orderDto.setOrderId(UUID.randomUUID().toString());
-        orderDto.setTotalPrice(orderDto.getQty() * orderDto.getUnitPrice());
+    public OrderDto createOrderByCart(OrderDto order) {
+        order.setOrderId(UUID.randomUUID().toString());
+        order.setTotalPrice(order.getQty() * order.getUnitPrice());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        OrderEntity orderEntity = mapper.map(orderDto, OrderEntity.class);
+        OrderEntity orderEntity = mapper.map(order, OrderEntity.class);
 
         orderRepository.save(orderEntity);
 
