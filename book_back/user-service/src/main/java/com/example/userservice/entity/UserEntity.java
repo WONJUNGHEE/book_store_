@@ -11,11 +11,9 @@ import java.time.LocalDate;
 @Table(name="users")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private String userId;
+
     @Column(nullable = false, length= 50, unique = true)
     private String myId;
     @Column(nullable = false, unique = true)
