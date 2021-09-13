@@ -96,8 +96,8 @@ public class CatalogController {
         CatalogDto catalogDto = mapper.map(catalog,CatalogDto.class);
         catalogService.createCatalog(catalogDto);
         ResponseCatalog responseCatalog = mapper.map(catalogDto,ResponseCatalog.class);
-
-         return ResponseEntity.status(HttpStatus.CREATED).body(responseCatalog);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseCatalog);
     }
     @PutMapping("/catalogs/{productId}")
     public ResponseEntity<ResponseCatalog> updateCatalog(@PathVariable("productId") String productId, @RequestBody @Valid RequestCatalog requestCatalog) {

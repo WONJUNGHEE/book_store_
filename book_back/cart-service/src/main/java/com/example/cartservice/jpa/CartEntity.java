@@ -1,6 +1,7 @@
 package com.example.cartservice.jpa;
 
 import lombok.Data;
+import org.apache.kafka.common.protocol.types.Field;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,9 +12,7 @@ import java.io.Serializable;
 public class CartEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //
-    @Column(nullable = false, unique = true)
-    private String cartId;
+    private String cartId; //
     @Column(nullable = false)
     private String productId; //
     @Column(nullable = false)
@@ -30,5 +29,7 @@ public class CartEntity implements Serializable {
     private String category; //
     @Column
     private String detail;
+    @Column
+    private String src;
 
 }

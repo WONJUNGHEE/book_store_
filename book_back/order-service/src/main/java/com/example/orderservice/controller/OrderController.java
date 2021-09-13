@@ -26,13 +26,13 @@ import java.util.*;
 public class OrderController {
     Environment env;
     OrderService orderService;
-    KafkaProducer  kafkaProducer;
+    KafkaProducer kafkaProducer;
     CatalogServiceClient catalogServiceClient;
     CartServiceClient cartServiceClient;
     OrderProducer orderProducer;
 
     @Autowired
-    public OrderController(Environment env, OrderService orderService,KafkaProducer kafkaProducer,
+    public OrderController(Environment env, OrderService orderService, KafkaProducer kafkaProducer,
                            CatalogServiceClient catalogServiceClient, CartServiceClient cartServiceClient,
                            OrderProducer orderProducer) {
         this.env = env;
@@ -57,10 +57,15 @@ public class OrderController {
         //rest template or openfeign
         boolean isAvailable = true;
         ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(orderDetails.getProductId());
+<<<<<<< HEAD
         System.out.println(responseCatalog);
         System.out.println(orderDetails);
         if(responseCatalog != null &&
                 responseCatalog.getQty()-orderDetails.getQty() < 0)
+=======
+        if (responseCatalog != null &&
+                responseCatalog.getQty() - orderDetails.getQty() < 0)
+>>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
             isAvailable = false;
 
         if (isAvailable) {
@@ -86,7 +91,9 @@ public class OrderController {
         }
 
     }
+
     @PostMapping("/{userId}/carts/orders")
+<<<<<<< HEAD
     public ResponseEntity<List<ResponseOrder>> createOrdersByCart(@PathVariable("userId") String userId) {
         boolean isAvailable = true;
         List<ResponseCart> responseCart = cartServiceClient.getCart(userId);
@@ -117,16 +124,32 @@ public class OrderController {
             }
         }
             return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
+=======
+    public ResponseEntity<ResponseOrder> createOrdersByCart(@PathVariable("userId") String userId, @RequestBody RequestOrder orderDetails) {
+        return null;
+>>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
     }
 
         @GetMapping("/{userId}/orders")
         public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
             Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
+<<<<<<< HEAD
             List<ResponseOrder> result = new ArrayList<>();
             orderList.forEach(v -> {
                 result.add(new ModelMapper().map(v, ResponseOrder.class));
             });
+=======
+
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
+        Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
+
+        List<ResponseOrder> result = new ArrayList<>();
+        orderList.forEach(v -> {
+            result.add(new ModelMapper().map(v, ResponseOrder.class));
+        });
+>>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
 //        Random rnd = new Random(System.currentTimeMillis());
 //        int time = rnd.nextInt(3);
 //        if (time % 2 == 0) {

@@ -1,6 +1,7 @@
 package com.example.cartservice.controller;
 
 import com.example.cartservice.client.CatalogServiceClient;
+import com.example.cartservice.client.UserServiceClient;
 import com.example.cartservice.dto.*;
 import com.example.cartservice.jpa.CartEntity;
 import com.example.cartservice.mq.KafkaProducer;
@@ -51,6 +52,7 @@ public class CartController {
 
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
+<<<<<<< HEAD
                                                     @RequestBody Requestcart cartDetails) {
 
 //        if(cartService.getCartsByProductName(userId,cartDetails.getProductName()) != null) {
@@ -79,6 +81,28 @@ public class CartController {
 
         log.info("After added carts data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+=======
+                                                    @RequestBody RequestCart requestCart) {
+        ResponseCatalog responseCatalog = catalogServiceClient.getCatalog(requestCart.getProductId());
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        CartDto cartDto = mapper.map(responseCatalog,CartDto.class);
+        cartDto.setUserId(userId);
+        cartDto.setQty(requestCart.getQty());
+        cartDto.setTotalPrice(requestCart.getQty()*requestCart.getUnitPrice());
+        CartDto existCartDto = cartService.getCartsByProductName(cartDto);
+
+        if(existCartDto.getFind() == 1){
+            existCartDto.setQty(cartDto.getQty()+existCartDto.getQty());
+            existCartDto.setTotalPrice(cartDto.getQty()*cartDto.getUnitPrice()+existCartDto.getTotalPrice());
+            cartService.updateCart(existCartDto);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        cartDto = cartService.createCart(cartDto);
+        ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
+        return ResponseEntity.status(HttpStatus.OK).body(responseCart);
+
+>>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
     }
 
 //    }

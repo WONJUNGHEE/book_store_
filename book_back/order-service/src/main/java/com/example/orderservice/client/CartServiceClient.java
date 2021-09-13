@@ -11,7 +11,11 @@ import java.util.List;
 @FeignClient(name="cart-service")
 public interface CartServiceClient {
     @GetMapping("/{userId}/carts")
+<<<<<<< HEAD
     List<ResponseCart> getCart(@PathVariable String userId);
+=======
+    ResponseCart getCart(@PathVariable("userId") String userId);
+>>>>>>> c8651ebec78bfe181ea87b434f295dc1f1bcea2b
 }
 
 
