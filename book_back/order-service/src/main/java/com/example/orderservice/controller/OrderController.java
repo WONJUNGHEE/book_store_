@@ -74,7 +74,7 @@ public class OrderController {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
             OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
-            orderDto.setUserId(userId);
+            orderDto.setProductName(responseCatalog.getProductName());
             orderDto.setCategory(responseCatalog.getCategory());
             orderDto.setProductId(responseCatalog.getProductId());
             orderDto.setProductName(responseCatalog.getProductName());

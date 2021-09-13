@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class RequestOrder {
     private String productId;
+    private String productName;
     private Integer qty;
     private Integer unitPrice;
     private String userId;

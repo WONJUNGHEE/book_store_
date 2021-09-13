@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-const Cart = (props: any): JSX.Element => {
-	const { catal } = props;
+const Purchase = (props: any): JSX.Element => {
 	const [booklists, setbooklists] = useState([]);
 	const router = useRouter();
 	const userId = JSON.parse(sessionStorage.getItem('login_info'));
@@ -63,7 +62,71 @@ const Cart = (props: any): JSX.Element => {
 						))}
 					</tbody>
 				</Booktable>
-				<button>주문하기</button>
+
+				<InputData>
+					<label htmlFor="productId">제품 ID</label>
+					<input
+						id="productId"
+						type="text"
+						placeholder="제품 고유 ID"
+						onChange={handleproductId}
+						onKeyPress={handleKeyPress}
+					></input>
+					<label htmlFor="title">책 제목</label>
+					<input
+						id="title"
+						type="text"
+						placeholder="제목을 입력하세요"
+						onChange={handleproductName}
+						onKeyPress={handleKeyPress}
+					></input>
+					<label htmlFor="qty">수량</label>
+					<input
+						id="qty"
+						type="text"
+						placeholder="현재 수량을 입력해주세요"
+						onChange={handleqty}
+						onKeyPress={handleKeyPress}
+					></input>
+					<label htmlFor="price">가격</label>
+					<input
+						id="price"
+						type="text"
+						placeholder="가격을 입력해주세요"
+						onChange={handleunitPrice}
+						onKeyPress={handleKeyPress}
+					></input>
+					<label htmlFor="summary">요약</label>
+					<input
+						id="summary"
+						type="text"
+						placeholder="요약 내용을 적어주세요"
+						onChange={handlesummary}
+						onKeyPress={handleKeyPress}
+					></input>
+					<div>카테고리</div>
+					<div>
+						<input type="radio" name="my-input" id="edu" value="edu" onChange={handlecategory} />
+						<label htmlFor="edu">교육</label>
+						<input
+							type="radio"
+							name="my-input"
+							id="cartoon"
+							value="cartoon"
+							onChange={handlecategory}
+						/>
+						<label htmlFor="cartoon">만화</label>
+						<input
+							type="radio"
+							name="my-input"
+							id="social"
+							value="social"
+							onChange={handlecategory}
+						/>
+						<label htmlFor="social">사회</label>
+						<ReigsterButton onClick={registerClick}>등록 하기</ReigsterButton>
+					</div>
+				</InputData>
 			</Backg>
 		</Fragment>
 	);
@@ -101,12 +164,7 @@ const Backg = styled.div`
 	position: relative;
 	padding: 20px;
 `;
-const Bookinfo = styled.div`
-	display: flex;
-`;
-const Detail = styled.div`
-	margin: 10px;
-`;
+
 const Booktable = styled.table`
 	width: 100%;
 	text-align: center;
@@ -123,4 +181,34 @@ const Wrap = styled.div`
 	text-align: center;
 	font-size: 15px;
 `;
-export default Cart;
+
+const InputData = styled.div`
+	margin: 15px;
+	display: flex;
+	width: 60%;
+	flex-direction: column;
+	align-items: center;
+	& > input,
+	label {
+		width: 300px;
+		padding: 5px;
+		margin: 5px;
+		text-align: center;
+	}
+	& > div {
+		width: 300px;
+		margin: 10px;
+		flex-direction: row;
+	}
+`;
+const ReigsterButton = styled.button`
+	margin-top: 15px;
+	width: 150px;
+	padding: 6px 12px;
+	color: #fff;
+	background-color: cadetblue;
+	border-radius: 5px;
+	font-size: 13px;
+	border: none;
+`;
+export default Purchase;

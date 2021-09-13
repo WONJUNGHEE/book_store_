@@ -43,24 +43,6 @@ const Login = (): JSX.Element => {
 				}
 				console.log(error);
 			});
-		// if (sessionStorage.getItem('user')) {
-		// 	const userinfo = JSON.parse(sessionStorage.getItem('user'));
-		// 	if (userinfo['id'] === inputId && userinfo['pw'] === inputPw) {
-		// 		if (userinfo['id'] === 'admin') {
-		// 			dispatch(actions.loginStart({ id: true, admin_check: true }));
-		// 		} else {
-		// 			dispatch(actions.loginStart({ id: true, admin_check: false }));
-		// 		}
-		// 		alert('로그인 성공');
-		// 		sessionStorage.setItem('login-ing', 'true');
-
-		// 		router.push('/');
-		// 	} else {
-		// 		alert('비밀번호가 틀렸습니다.');
-		// 	}
-		// } else {
-		// 	alert('없는 아이디입니다.');
-		// }
 	};
 	return (
 		<Fragment>
