@@ -63,6 +63,7 @@ public class CartServiceImpl implements CartService {
         CartEntity cartEntity = mapper.map(cartDto, CartEntity.class);
         cartRepository.save(cartEntity);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     }
 
     @Override
@@ -73,6 +74,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteByProductName(String productName) {
         cartRepository.deleteByProductName(productName);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     }

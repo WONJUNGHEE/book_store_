@@ -14,6 +14,7 @@ public class ResponseCatalog {
     private Integer unitPrice;
     private String category;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     private String src;
     private String detail;
@@ -21,6 +22,10 @@ public class ResponseCatalog {
     private String detail;
     private String src;
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    private String src;
+    private String detail;
+>>>>>>> Stashed changes
 =======
     private String src;
     private String detail;

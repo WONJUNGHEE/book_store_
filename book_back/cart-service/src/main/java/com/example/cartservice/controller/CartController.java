@@ -54,7 +54,10 @@ public class CartController {
     @PostMapping("/{userId}/carts")
     public ResponseEntity<ResponseCart> createOrder(@PathVariable("userId") String userId,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                                                     @RequestBody RequestCart requestCart) {
@@ -76,6 +79,7 @@ public class CartController {
         cartDto = cartService.createCart(cartDto);
         ResponseCart responseCart = mapper.map(cartDto,ResponseCart.class);
         return ResponseEntity.status(HttpStatus.OK).body(responseCart);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
 =======
@@ -107,6 +111,8 @@ public class CartController {
 
         log.info("After added carts data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseCart);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

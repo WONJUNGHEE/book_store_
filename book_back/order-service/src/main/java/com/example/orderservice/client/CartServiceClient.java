@@ -12,11 +12,15 @@ import java.util.List;
 public interface CartServiceClient {
     @GetMapping("/{userId}/carts")
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     ResponseCart getCart(@PathVariable("userId") String userId);
 =======
     List<ResponseCart> getCart(@PathVariable String userId);
 >>>>>>> 308d72e012ab539beade09a33c416191ad380ff5
+=======
+    ResponseCart getCart(@PathVariable("userId") String userId);
+>>>>>>> Stashed changes
 =======
     ResponseCart getCart(@PathVariable("userId") String userId);
 >>>>>>> Stashed changes
