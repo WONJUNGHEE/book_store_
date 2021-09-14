@@ -3,13 +3,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import S3 from 'react-aws-s3';
 
-const config = {
-	bucketName: 'book-store-5',
-	dirName: 'book-image',
-	region: 'us-west-2',
-	accessKeyId: 'AKIATAAJIQVAFMG5SVCX',
-	secretAccessKey: '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',
-};
 const Book_register = (): JSX.Element => {
 	const [file, setFile] = useState<string>('');
 	const [previewURL, setpreviewURL] = useState<string>('');
