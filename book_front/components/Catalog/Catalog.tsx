@@ -6,18 +6,16 @@ import { paginate } from '../../utils/paginate';
 import Pagination from './Pagination';
 
 const Catalog = (props: any): JSX.Element => {
-	const { catal } = props;
+	const { catal, header } = props;
+
 	const [booklists, setbooklists] = useState({ bookdata: [], pageSize: 4, currentPage: 1 });
 	const router = useRouter();
-	const GoDetail = (e): void => {
-		console.log(e.target.className);
-		// router.push(e.target.href);
-	};
+
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
 				const booklist = [];
-				const list1 = await axios.get('http://localhost:50101/catalogs');
+				const list1 = await axios.get('http://localhost:8000/catalog-service/catalogs');
 
 				for (const book of list1.data) {
 					let detaillength;
@@ -65,6 +63,7 @@ const Catalog = (props: any): JSX.Element => {
 	return (
 		<Fragment>
 			<Backg>
+				<CatalogHeader>{header}</CatalogHeader>
 				<Booktable>
 					<thead>
 						<tr>
@@ -78,12 +77,16 @@ const Catalog = (props: any): JSX.Element => {
 						{pagedBooks.map((data) => (
 							<tr
 								key={data.createdAt}
-								onClick={() =>
-									router.push({
-										pathname: '/DetailBook_page',
-										query: { ...data, createdAt: data.createdAt.substring(0, 10) },
-									})
-								}
+								onClick={() => {
+									if (sessionStorage.getItem('login-ing') === 'true') {
+										router.push({
+											pathname: '/DetailBook_page',
+											query: { ...data, createdAt: data.createdAt.substring(0, 10) },
+										});
+									} else {
+										router.push('/LoginPage');
+									}
+								}}
 							>
 								<td>
 									<img width="50px" height="70px" src={data.src}></img>
@@ -136,5 +139,9 @@ const Wrap = styled.div`
 	margin: 20px;
 	text-align: center;
 	font-size: 15px;
+`;
+
+const CatalogHeader = styled.h2`
+	text-align: center;
 `;
 export default Catalog;

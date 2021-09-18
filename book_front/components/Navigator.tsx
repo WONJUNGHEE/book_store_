@@ -15,7 +15,11 @@ const Navigation = (): JSX.Element => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		router.push(e.target.href);
+		if (sessionStorage.getItem('login-ing') === 'true') {
+			router.push(e.target.href);
+		} else {
+			router.push('/LoginPage');
+		}
 	};
 
 	const logout = () => {

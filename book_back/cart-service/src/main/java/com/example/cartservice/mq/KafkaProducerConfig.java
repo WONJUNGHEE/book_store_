@@ -14,7 +14,7 @@ import java.util.Map;
 public class KafkaProducerConfig {
     public ProducerFactory<String, String> producerFactory() {
         Map<String,Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.35.111:9092");
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"34.209.188.214:9092");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class);
 

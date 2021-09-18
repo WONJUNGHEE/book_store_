@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from '../components/login/Login';
-import SignUp from '../components/login/SignUp';
+import SignUp from '../components/login/Signup';
 import styled from 'styled-components';
 
 const LoginPage = () => {

@@ -11,7 +11,7 @@ const DetailBook = (props): JSX.Element => {
 	const cartgo = async () => {
 		try {
 			await axios
-				.post(`http://localhost:50005/${userId[1]}/carts`, {
+				.post(`http://localhost:8000/cart-service/${userId[1]}/carts`, {
 					productId: props.data.productId,
 					productName: props.data.productName,
 					qty: bookcnt,
@@ -74,8 +74,8 @@ const DetailBook = (props): JSX.Element => {
 						<label htmlFor="cnt">수량</label>
 						<input type="number" placeholder="1" id="cnt" onChange={handlebookcnt} />
 						<div>
-							<button onClick={handlepurchase}>구매하기</button>
-							<button onClick={handlecart}>장바구니</button>
+							<DetailButton onClick={handlepurchase}>구매하기</DetailButton>
+							<DetailButton onClick={handlecart}>장바구니</DetailButton>
 						</div>
 					</InputData>
 				</Wrap>
@@ -143,9 +143,9 @@ const InputData = styled.div`
 	}
 `;
 
-const ReigsterButton = styled.button`
-	margin-top: 15px;
-	width: 150px;
+const DetailButton = styled.button`
+	margin: 15px;
+	width: 100px;
 	padding: 6px 12px;
 	color: #fff;
 	background-color: cadetblue;

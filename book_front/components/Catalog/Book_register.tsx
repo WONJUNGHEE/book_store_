@@ -2,17 +2,20 @@ import { Fragment, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import S3 from 'react-aws-s3';
-
+import Loader from '../Loading';
+//.env파일
 const config = {
-	bucketName: 'book-store-5',
-	dirName: 'book-image',
-	region: 'us-west-2',
-	accessKeyId: 'AKIATAAJIQVAFMG5SVCX',
-	secretAccessKey: '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',
+	bucketName: process.env.BucketName,
+	dirName: process.env.DirName,
+	region: process.env.Region,
+	accessKeyId: process.env.AccessKeyId,
+	secretAccessKey: process.env.SecretAccessKey,
 };
+
 const Book_register = (): JSX.Element => {
 	const [file, setFile] = useState<string>('');
 	const [previewURL, setpreviewURL] = useState<string>('');
+	const [loading, setLoading] = useState(null);
 
 	const [summary, setSummary] = useState<string>('');
 	const [productId, setInputproductId] = useState<string>('');
@@ -47,7 +50,7 @@ const Book_register = (): JSX.Element => {
 
 	const registeraxios = async (data) => {
 		await axios
-			.post('http://localhost:50101/catalogs', {
+			.post('http://localhost:8000/catalog-service/catalogs', {
 				productId: productId,
 				productName: productName,
 				qty: qty,
@@ -82,23 +85,25 @@ const Book_register = (): JSX.Element => {
 	};
 	const s3 = async () => {
 		const reacts3 = new S3(config);
+		setLoading(true);
 		await reacts3
 			.uploadFile(file, productName)
 			.then((data) => {
-				console.log(data);
 				registeraxios(data.location);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+		setLoading(false);
 	};
+
 	const handleFileOnChange = (event) => {
 		event.preventDefault();
 		const reader = new FileReader();
 		const file = event.target.files[0];
 		reader.onloadend = () => {
 			setFile(file);
-			setpreviewURL(reader.result);
+			if (typeof reader.result === 'string') setpreviewURL(reader.result);
 		};
 		reader.readAsDataURL(file);
 	};
@@ -108,6 +113,8 @@ const Book_register = (): JSX.Element => {
 			<img width="350px" height="400px" className="profile_preview" src={previewURL}></img>
 		);
 	}
+	if (loading) return <Loader type="spin" color="RGB 값" message={'등록중입니다.'} />;
+
 	return (
 		<Fragment>
 			<Backg>

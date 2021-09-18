@@ -23,8 +23,10 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
     #prefer-ip-address: true
     #ip-address: ${server.address}
+
   client:
     register-with-eureka: true
     fetch-registry: true

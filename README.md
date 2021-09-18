@@ -1,9 +1,13 @@
 # tmax_project
 
-5조 우희희
-북 스토어
-조장 이우재!
-조원 원정희
-조원 김동희
+팀구성 : 이우재, 원정희, 김동희
 
-취업합시다!!
+아키텍처 : MSA
+
+배포 : AWS EC2, S3, AWS RDS , Docker, (Kubernetes) 현재 학습중
+
+Front-end : Next.js, Redux, React, TypeScript
+
+Back-end : Spring-boot , Mariadb, Kafka
+
+직면한 문제 : CORS 문제, AWS 배포 문제

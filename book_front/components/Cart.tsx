@@ -14,7 +14,7 @@ const Cart = (props: any): JSX.Element => {
 		const fetchUsers = async () => {
 			try {
 				const cartlist = [];
-				await axios.get(`http://localhost:50005/${userId[1]}/carts`).then((res) => {
+				await axios.get(`http://localhost:8000/cart-service/${userId[1]}/carts`).then((res) => {
 					for (const cart of res.data) {
 						cartlist.push(cart);
 					}
@@ -29,7 +29,7 @@ const Cart = (props: any): JSX.Element => {
 	const cartdel = async (e) => {
 		try {
 			await axios
-				.delete(`http://localhost:50005/${userId[1]}/carts/${e.target.value}`)
+				.delete(`http://localhost:8000/cart-service/${userId[1]}/carts/${e.target.value}`)
 				.then((res) => {
 					alert('삭제되었습니다.');
 				});
@@ -39,9 +39,11 @@ const Cart = (props: any): JSX.Element => {
 	};
 	const cartorders = async (e) => {
 		try {
-			await axios.post(`http://localhost:40000/${userId[1]}/carts/orders`).then((res) => {
-				alert('주문이 완료 되었습니다.');
-			});
+			await axios
+				.post(`http://localhost:8000/order-service/${userId[1]}/carts/orders`)
+				.then((res) => {
+					alert('주문이 완료 되었습니다.');
+				});
 		} catch (error) {
 			console.log(error);
 		}
@@ -69,42 +71,19 @@ const Cart = (props: any): JSX.Element => {
 								<td>{data.unitPrice}</td>
 								<td>{data.qty}</td>
 								<td>
-									<button value={data.productName} onClick={cartdel}>
+									<DetailButton value={data.productName} onClick={cartdel}>
 										삭제
-									</button>
+									</DetailButton>
 								</td>
 							</tr>
 						))}
 					</tbody>
 				</Booktable>
-				<button onClick={cartorders}>주문하기</button>
+				<DetailButton onClick={cartorders}>주문하기</DetailButton>
 			</Backg>
 		</Fragment>
 	);
 };
-
-// const list1 = await axios.get('http://localhost:50101/catalogs');
-
-// for (const book of list1.data) {
-// 	let detaillength;
-// 	if (catal == 'All') {
-// 		book.detail.length > 20
-// 			? (detaillength = book.detail.substr(0, 20) + '...')
-// 			: (detaillength = book.detail);
-// 		booklist.push({
-// 			...book,
-// 			detail: detaillength,
-// 		});
-// 	} else if (book.category === catal) {
-// 		book.detail.length > 20
-// 			? (detaillength = book.detail.substr(0, 20) + '...')
-// 			: (detaillength = book.detail);
-// 		booklist.push({
-// 			...book,
-// 			detail: detaillength,
-// 		});
-// 	}
-// }
 
 const Backg = styled.div`
 	width: 800px;
@@ -115,12 +94,7 @@ const Backg = styled.div`
 	position: relative;
 	padding: 20px;
 `;
-const Bookinfo = styled.div`
-	display: flex;
-`;
-const Detail = styled.div`
-	margin: 10px;
-`;
+
 const Booktable = styled.table`
 	width: 100%;
 	text-align: center;
@@ -128,13 +102,14 @@ const Booktable = styled.table`
 	border: 1px solid goldenrod;
 	border-radius: 10px;
 `;
-const Wrap = styled.div`
-	display: flex;
-	flex-direction: row;
-	height: 510px;
-	width: 100%;
-	margin: 20px;
-	text-align: center;
-	font-size: 15px;
+const DetailButton = styled.button`
+	margin: 15px;
+	width: 100px;
+	padding: 6px 12px;
+	color: #fff;
+	background-color: cadetblue;
+	border-radius: 5px;
+	font-size: 13px;
+	border: none;
 `;
 export default Cart;

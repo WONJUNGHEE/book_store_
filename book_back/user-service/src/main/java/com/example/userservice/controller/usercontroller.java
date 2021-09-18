@@ -24,7 +24,6 @@ import java.util.List;
 @Transactional
 @RestController
 @RequestMapping("/")
-@CrossOrigin("*")
 public class usercontroller {
 
     private final Environment env;

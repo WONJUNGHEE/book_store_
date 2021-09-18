@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 @Slf4j
-@CrossOrigin("*")
+
 public class CatalogController {
     private Environment env;
     CatalogService catalogService;

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const EduPage = (): JSX.Element => {
 	return (
 		<CatalogBg>
-			<Catalog catal="edu" />
+			<Catalog catal="edu" header="교육" />
 		</CatalogBg>
 	);
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import Main_book from '../components/Main_book';
+import Main_book from '../components/main_book';
 export default function Home() {
 	return (
 		<div className="container">

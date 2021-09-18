@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const CatalogPage = (): JSX.Element => {
 	return (
 		<CatalogBg>
-			<Catalog catal="All" />
+			<Catalog catal="All" header="책 전체" />
 		</CatalogBg>
 	);
 };

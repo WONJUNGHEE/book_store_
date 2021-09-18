@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const CartoonPage = (): JSX.Element => {
 	return (
 		<CatalogBg>
-			<Catalog catal="cartoon" />
+			<Catalog catal="cartoon" header="만화" />
 		</CatalogBg>
 	);
 };

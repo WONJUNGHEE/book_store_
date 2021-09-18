@@ -19,15 +19,24 @@ const MyPage = (): JSX.Element => {
 		const myinfo = async () => {
 			try {
 				const orderlist = [];
-				const orderedd = await axios.get(`http://localhost:50001/users/${userId[1]}`);
+				const config = {
+					headers: {
+						Authorization: 'Bearer ' + userId[0],
+					},
+				};
+				const orderedd = await axios.get(
+					`http://localhost:8000/user-service/users/${userId[1]}`,
+					config,
+				);
 
 				setName(orderedd.data.userName),
 					setAddress(orderedd.data.address),
 					setId(orderedd.data.myId),
 					setMail(orderedd.data.email);
+				let cnt = 0;
 				for (const list of orderedd.data.orders) {
 					orderlist.push(
-						<OrderList>
+						<OrderList key={cnt++}>
 							<div>책 이름 : {list.productId}</div>
 							<div>수량 : {list.qty}</div>
 							<div>구매 가격 : {list.totalPrice}원</div>
@@ -42,9 +51,8 @@ const MyPage = (): JSX.Element => {
 			}
 		};
 		myinfo();
-		console.log(ordered);
 	}, []);
-	console.log(ordered);
+
 	const handlePageChange = (page) => {
 		setordered({ ...ordered, currentPage: page });
 	};
